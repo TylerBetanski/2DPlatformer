@@ -77,5 +77,8 @@ public class MenuState extends GameState {
 	
 	public void select() {
 		System.out.println("You selected: " + options[currentChoice] + "!");
+		if(currentChoice == 0) {
+			gameStateManager.setState(GameStateManager.LEVEL1STATE);
+		}
 	}
 }
