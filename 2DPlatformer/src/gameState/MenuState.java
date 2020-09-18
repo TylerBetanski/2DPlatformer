@@ -4,8 +4,9 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 
+import assets.Assets;
+import gfx.Background;
 import input.Keys;
-import tileMap.Background;
 
 public class MenuState extends GameState {
 	private Background bg;
@@ -23,7 +24,7 @@ public class MenuState extends GameState {
 
 	public MenuState(GameStateManager gameStateManager) {
 		super(gameStateManager);
-		bg = new Background("/Backgrounds/menuBG.png", 1);
+		bg = Assets.PARROT_BG;
 		bg.setVector(-0.5, 0);
 
 		titleColor = Color.BLACK;

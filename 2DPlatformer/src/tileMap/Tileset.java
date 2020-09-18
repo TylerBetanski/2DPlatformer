@@ -3,29 +3,43 @@ package tileMap;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 
+import gfx.Texture;
+import utils.Utils;
+
 public class Tileset {
-	private BufferedImage tileset;
-	private final Tile[][] TILES;
+	private Tile[] tiles;
 	
-	public Tileset(int tileSize) {
-		TILES = new Tile[tileset.getWidth()/tileSize][tileset.getHeight()/tileSize];
-		for(int x = 0; x < TILES.length; x++) {
-			for(int y = 0; y < TILES[x].length; y++) {
-				
+	public Tileset(String loc) {
+		BufferedImage tileset = Utils.loadImage(loc);
+		tiles = new Tile[(int)((tileset.getWidth() / Tile.TILE_SIZE) * (tileset.getHeight() / Tile.TILE_SIZE))];
+		
+		for(int x = 0; x < tileset.getWidth() / Tile.TILE_SIZE; x++) {
+			for(int y = 0; y < tileset.getHeight() / Tile.TILE_SIZE; y++) {
+				boolean solidFlag = false;
 				Color pixelColor;
-				for(int pixelX = 0 + (x * tileSize); pixelX < tileSize * (x + 1); pixelX++) {
-					for(int pixelY = 0 + (y * tileSize); pixelY < tileSize * (y + 1); pixelY++) {
+				for(int pixelX = x * Tile.TILE_SIZE; pixelX < x * Tile.TILE_SIZE + Tile.TILE_SIZE; pixelX++) {
+					for(int pixelY = y * Tile.TILE_SIZE; pixelY < y * Tile.TILE_SIZE + Tile.TILE_SIZE; pixelY++) {
 						pixelColor = new Color(tileset.getRGB(pixelX, pixelY));
-						if(pixelColor.getRed() > 0 && pixelColor.getBlue() == 0) { // If the pixel is Red
-							//TILES[x][y] = new Tile(tileset.getSubimage(x * tileSize, y * tileSize, tileSize, tileSize), Tile.SOLID);
-						} else {
-							//TILES[x][y] = new Tile(tileset.getSubimage(x * tileSize, y * tileSize, tileSize, tileSize), Tile.AIR);
-						}
+						if(pixelColor.getRed() > 0 && pixelColor.getBlue() == 0)
+							solidFlag = true;
 					}
 				}
+				if(solidFlag)
+					tiles[x + x*y] = new Tile(new Texture(tileset.getSubimage(x, y, Tile.TILE_SIZE, Tile.TILE_SIZE)), true);
+				else
+					tiles[x + x*y] = new Tile(new Texture(tileset.getSubimage(x, y, Tile.TILE_SIZE, Tile.TILE_SIZE)), false);
 			}
 		}
 	}
 	
+	public Tile[] getTiles() {
+		return tiles;
+	}
 	
+	public Tile getTile(int index) {
+		if(index < tiles.length)
+			return tiles[index];
+		else
+			return null;
+	}
 }
