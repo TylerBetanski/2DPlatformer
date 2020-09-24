@@ -9,11 +9,8 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
-import assets.Assets;
 import gameState.GameStateManager;
 import input.Keys;
-import tileMap.TileMap2;
-import utils.Utils;
 
 public class GamePanel extends JPanel implements Runnable, KeyListener {
 	private static final long serialVersionUID = 1L;
@@ -59,8 +56,6 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 		running = true;
 		
 		gsm = new GameStateManager();
-		
-		TileMap2 tm = new TileMap2("Resources/Maps/testLevel.lvlData");
 	}
 
 	@Override

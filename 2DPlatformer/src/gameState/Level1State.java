@@ -2,6 +2,8 @@ package gameState;
 
 import java.awt.Graphics2D;
 
+import tileMap.TileMap;
+
 public class Level1State extends GameState {
 	
 	private TileMap tileMap;
@@ -13,7 +15,7 @@ public class Level1State extends GameState {
 
 	@Override
 	public void init() {
-		tileMap = new TileMap(32);
+		tileMap = new TileMap("Resources/Maps/testLevel.lvlData");
 	}
 
 	@Override
@@ -23,7 +25,7 @@ public class Level1State extends GameState {
 
 	@Override
 	public void draw(Graphics2D g) {
-		
+		tileMap.draw(g);
 	}
 
 }

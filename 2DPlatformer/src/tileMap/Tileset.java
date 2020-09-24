@@ -25,9 +25,9 @@ public class Tileset {
 					}
 				}
 				if(solidFlag)
-					tiles[x + x*y] = new Tile(new Texture(tileset.getSubimage(x, y, Tile.TILE_SIZE, Tile.TILE_SIZE)), true);
+					tiles[x + x*y] = new Tile(new Texture(tileset.getSubimage(x * Tile.TILE_SIZE, y, Tile.TILE_SIZE, Tile.TILE_SIZE)), true);
 				else
-					tiles[x + x*y] = new Tile(new Texture(tileset.getSubimage(x, y, Tile.TILE_SIZE, Tile.TILE_SIZE)), false);
+					tiles[x + x*y] = new Tile(new Texture(tileset.getSubimage(x * Tile.TILE_SIZE, y, Tile.TILE_SIZE, Tile.TILE_SIZE)), false);
 			}
 		}
 	}

@@ -1,52 +1,34 @@
 package tileMap;
 
-import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
+import java.awt.Graphics2D;
 
-import main.GamePanel;
+import assets.Assets;
 import utils.Utils;
 
 public class TileMap {
-	// Position
-	private double x, y;
-	private Rectangle bounds;
-	
-	private double tween;
-	
-	// Map
-	private int[][] map;
-	private int tileSize;
-	private int numRows;
-	private int numCols;
-	private int width;
-	private int height;
-	
-	// Tileset
-	private BufferedImage tileset;
-	private int numTilesAcross;
 	private Tile[][] tiles;
-	
-	// Drawing Bounds
-	private int rowOffset;
-	private int colOffset;
-	private int numRowsToDraw;
-	private int numColsToDraw;
-	
-	public TileMap(int tilesize) {
-		this.tileSize = tilesize;
-		numRowsToDraw = GamePanel.HEIGHT / tileSize + 2;
-		numColsToDraw = GamePanel.WIDTH / tileSize + 2;
-		tween = 0.07;
+
+	public TileMap(String loc) {
+		loadMap(loc);
+	}
+
+	public void loadMap(String loc) {
+		String map = Utils.loadFileAsString(loc);
+		String[] tokens = map.split("\\s+");
+		tiles = new Tile[Integer.parseInt(tokens[0])][Integer.parseInt(tokens[1])];
+		for(int y = 0; y < tiles[0].length; y++) {
+			for(int x = 0; x < tiles.length; x++) {
+				String[] tileToken = tokens[(x + y * tiles.length) + 2].split("#");
+				tiles[x][y] = Assets.TILESETS.get(Integer.parseInt(tileToken[0])).getTile(Integer.parseInt(tileToken[1]));
+			}
+		}
 	}
 	
-	public void loadTiles(String s) {
-		tileset = Utils.loadImage("/Tilesets/testTileset,png");
-		numTilesAcross = tileset.getWidth() / tileSize;
-		tiles = new Tile[1][numTilesAcross];
-		//tiles[0][0] = new Tile(, Tile.NORMAL);
-	}
-	
-	public void loadMap() {
-		
+	public void draw(Graphics2D g) {
+		for(int x = 0; x < tiles.length; x++) {
+			for(int y = 0; y < tiles[x].length; y++) {
+				tiles[x][y].draw(g, x * Tile.TILE_SIZE, y * Tile.TILE_SIZE);
+			}
+		}
 	}
 }

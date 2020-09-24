@@ -14,6 +14,10 @@ public class Texture {
 		g.drawImage(texture, x, y, width, height, null);
 	}
 	
+	public void draw(Graphics2D g, int x, int y) {
+		g.drawImage(texture, x, y, null);
+	}
+	
 	public void update() {}
 	
 	protected void setTexture(BufferedImage image) {

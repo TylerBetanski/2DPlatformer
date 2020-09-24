@@ -1,5 +1,7 @@
 package assets;
 
+import java.util.ArrayList;
+
 import gfx.Background;
 import tileMap.Tileset;
 
@@ -12,6 +14,15 @@ public class Assets {
 	public static final Background PARROT_BG = new Background("/Backgrounds/parrotBG.png", 1);
 	
 	// Tilesets
-	public static final Tileset TEST_TILESET = new Tileset("/Tilesets/testTileset.png");
+	public static final ArrayList<Tileset> TILESETS = new ArrayList<Tileset>();
+	public static final Tileset TEST_TILESET = addTileset(TILESETS, new Tileset("/Tilesets/testTileset.png"));
 
+	public void init() {
+		
+	}
+	
+	public static Tileset addTileset(ArrayList<Tileset> arrayList, Tileset tileset) {
+		arrayList.add(tileset);
+		return tileset;
+	}
 }
