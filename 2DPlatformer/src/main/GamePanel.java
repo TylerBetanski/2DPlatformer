@@ -1,5 +1,6 @@
 package main;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -10,7 +11,9 @@ import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 
 import gameState.GameStateManager;
+import gfx.RenderEffect;
 import input.Keys;
+import utils.Utils;
 
 public class GamePanel extends JPanel implements Runnable, KeyListener {
 	private static final long serialVersionUID = 1L;
@@ -94,11 +97,15 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 	}
 
 	private void draw() {
+		// Clear Screen
+		g.fillRect(0, 0, WIDTH, HEIGHT);
+		
 		gsm.draw(g);
 	}
 
 	private void drawToScreen() {
 		Graphics g2 = getGraphics();
+		//image = RenderEffect.colorScale(image, Color.MAGENTA, Color.CYAN);
 		g2.drawImage(image, 0, 0, WIDTH * SCALE, HEIGHT * SCALE, null);
 		g2.dispose();
 	}

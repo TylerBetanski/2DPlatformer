@@ -7,13 +7,13 @@ import main.GamePanel;
 import utils.Utils;
 
 public class Background {
-	private BufferedImage image;
+	private Texture texture;
 
 	private double x, y, dx, dy;
 	private double moveScale;
 
 	public Background(String loc, double ms) {
-		image = Utils.loadImage(loc);
+		texture = new Texture(Utils.loadImage(loc));
 		moveScale = ms;
 	}
 
@@ -33,24 +33,33 @@ public class Background {
 	}
 
 	public void draw(Graphics2D g) {
-		g.drawImage(image, (int)x, (int)y, null);
-		
-		// Tile the Background
+		texture.draw(g, (int)x, (int)y);
+
+		//Tile the Background
 		if(x < 0)
-			g.drawImage(image, (int)x + image.getWidth(), (int)y, null );
-		if(x + image.getWidth() < 0)
+			texture.draw(g, (int)x + GamePanel.WIDTH, (int)y);
+		if(x + texture.getWidth() < 0)
 			x = GamePanel.WIDTH;
 		if(x > 0)
-			g.drawImage(image, (int)x - GamePanel.WIDTH, (int)y, null );
+			texture.draw(g, (int)x - GamePanel.WIDTH, (int)y);
 		if(x > GamePanel.WIDTH)
 			x = 0;
 		if(y < 0)
-			g.drawImage(image, (int)x, (int)y + GamePanel.HEIGHT, null );
+			texture.draw(g, (int)x, (int)y + GamePanel.HEIGHT);
 		if(y > GamePanel.HEIGHT)
 			y = 0;
 		if(y > 0)
-			g.drawImage(image, (int)x, (int)y - GamePanel.HEIGHT, null );
-		if(y + image.getHeight() < 0)
+			texture.draw(g, (int)x, (int)y - GamePanel.HEIGHT);
+		if(y + texture.getHeight() < 0)
 			y = GamePanel.WIDTH;
+		if(x < 0 && y < 0)
+			texture.draw(g, (int)x + texture.getWidth(), (int)y + texture.getHeight());
+		if(x < 0 && y - texture.getHeight() < 0)
+			texture.draw(g, (int)x + texture.getWidth(), (int)y - texture.getHeight());
+		if(x + texture.getWidth() > GamePanel.WIDTH && y < 0)
+			texture.draw(g, (int)x - texture.getWidth(), (int)y - texture.getHeight());
+		if(x + texture.getWidth() > GamePanel.WIDTH && y - texture.getHeight() < 0)
+			texture.draw(g, (int)x - texture.getWidth(), (int)y - texture.getHeight());
+		
 	}
 }

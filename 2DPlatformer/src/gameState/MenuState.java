@@ -24,7 +24,7 @@ public class MenuState extends GameState {
 
 	public MenuState(GameStateManager gameStateManager) {
 		super(gameStateManager);
-		bg = Assets.PARROT_BG;
+		bg = Assets.MENU_BG;
 		bg.setVector(-0.5, 0);
 
 		titleColor = Color.BLACK;

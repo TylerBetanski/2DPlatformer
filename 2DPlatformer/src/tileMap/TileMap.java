@@ -19,7 +19,11 @@ public class TileMap {
 		for(int y = 0; y < tiles[0].length; y++) {
 			for(int x = 0; x < tiles.length; x++) {
 				String[] tileToken = tokens[(x + y * tiles.length) + 2].split("#");
-				tiles[x][y] = Assets.TILESETS.get(Integer.parseInt(tileToken[0])).getTile(Integer.parseInt(tileToken[1]));
+				if(tileToken[0].equals("000")) {
+					tiles[x][y] = null;
+				} else {
+					tiles[x][y] = Assets.TILESETS.get(Integer.parseInt(tileToken[0])).getTile(Integer.parseInt(tileToken[1]));
+				}
 			}
 		}
 	}
@@ -27,7 +31,8 @@ public class TileMap {
 	public void draw(Graphics2D g) {
 		for(int x = 0; x < tiles.length; x++) {
 			for(int y = 0; y < tiles[x].length; y++) {
-				tiles[x][y].draw(g, x * Tile.TILE_SIZE, y * Tile.TILE_SIZE);
+				if(tiles[x][y] != null)
+					tiles[x][y].draw(g, x * Tile.TILE_SIZE, y * Tile.TILE_SIZE);
 			}
 		}
 	}

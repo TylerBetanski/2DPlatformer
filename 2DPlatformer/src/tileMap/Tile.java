@@ -7,7 +7,7 @@ import gfx.Texture;
 public class Tile {
 	private Texture texture;
 	private boolean solid;
-	public static final int TILE_SIZE = 16;
+	public static final int TILE_SIZE = 32;
 	
 	public Tile(Texture tex, boolean solid) {
 		texture = tex;

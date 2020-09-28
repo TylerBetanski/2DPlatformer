@@ -23,5 +23,14 @@ public class Texture {
 	protected void setTexture(BufferedImage image) {
 		texture = image;
 	}
-
+	
+	public int getWidth()
+	{
+		return texture.getWidth();
+	}
+	
+	public int getHeight()
+	{
+		return texture.getHeight();
+	}
 }

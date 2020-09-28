@@ -46,4 +46,18 @@ public class RenderEffect {
 
 		return image;
 	}
+	
+	public static BufferedImage blackAndWhite(BufferedImage image) {
+		Color pixelColor;
+		for(int x = 0; x < image.getWidth(); x++) {
+			for(int y = 0; y < image.getHeight(); y++) {
+				pixelColor = new Color(image.getRGB(x, y));
+				if(!pixelColor.equals(Color.BLACK)) {
+					image.setRGB(x, y, Color.WHITE.getRGB());
+				}
+			}
+		}
+		
+		return image;
+	}
 }
