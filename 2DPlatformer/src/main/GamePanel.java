@@ -1,6 +1,5 @@
 package main;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -11,9 +10,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 
 import gameState.GameStateManager;
-import gfx.RenderEffect;
 import input.Keys;
-import utils.Utils;
 
 public class GamePanel extends JPanel implements Runnable, KeyListener {
 	private static final long serialVersionUID = 1L;

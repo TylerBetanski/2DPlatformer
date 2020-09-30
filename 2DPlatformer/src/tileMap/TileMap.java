@@ -20,7 +20,7 @@ public class TileMap {
 			for(int x = 0; x < tiles.length; x++) {
 				String[] tileToken = tokens[(x + y * tiles.length) + 2].split("#");
 				if(tileToken[0].equals("000")) {
-					tiles[x][y] = null;
+					tiles[x][y] = new AirTile();
 				} else {
 					tiles[x][y] = Assets.TILESETS.get(Integer.parseInt(tileToken[0])).getTile(Integer.parseInt(tileToken[1]));
 				}
@@ -35,5 +35,17 @@ public class TileMap {
 					tiles[x][y].draw(g, x * Tile.TILE_SIZE, y * Tile.TILE_SIZE);
 			}
 		}
+	}
+	
+	public void update() {
+		for(Tile[] tileArray: tiles) {
+			for(Tile tile: tileArray) {
+				tile.update();
+			}
+		}
+	}
+	
+	public Tile getTile(int x, int y) {
+		return tiles[(int)(x / Tile.TILE_SIZE)][(int)(y / Tile.TILE_SIZE)];
 	}
 }

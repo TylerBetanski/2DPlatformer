@@ -30,4 +30,8 @@ public class GameStateManager {
 	public void draw(Graphics2D g) {
 		gameStates.get(currentState).draw(g);
 	}
+	
+	public GameState getCurrentState() {
+		return gameStates.get(currentState);
+	}
 }

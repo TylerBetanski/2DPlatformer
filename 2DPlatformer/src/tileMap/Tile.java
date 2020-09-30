@@ -20,7 +20,7 @@ public class Tile {
 	}
 	
 	public void update() {
-		
+		texture.update();
 	}
 	
 	public boolean isSolid() { return solid; }

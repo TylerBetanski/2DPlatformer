@@ -3,14 +3,9 @@ package gameState;
 import java.awt.Graphics2D;
 
 import assets.Assets;
-import gfx.Background;
 import tileMap.TileMap;
 
-public class Level1State extends GameState {
-	
-	private TileMap tileMap;
-	
-	private Background bg = Assets.GRADIENT_BG;
+public class Level1State extends LevelState {
 
 	public Level1State(GameStateManager gameStateManager) {
 		super(gameStateManager);
@@ -20,11 +15,13 @@ public class Level1State extends GameState {
 	@Override
 	public void init() {
 		tileMap = new TileMap("Resources/Maps/testLevel.lvlData");
+		bg = Assets.GRADIENT_BG;
 	}
 
 	@Override
 	public void update() {
 		bg.update();
+		tileMap.update();
 	}
 
 	@Override

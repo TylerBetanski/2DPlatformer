@@ -20,8 +20,10 @@ public class Tileset {
 				for(int pixelX = x * Tile.TILE_SIZE; pixelX < x * Tile.TILE_SIZE + Tile.TILE_SIZE; pixelX++) {
 					for(int pixelY = y * Tile.TILE_SIZE; pixelY < y * Tile.TILE_SIZE + Tile.TILE_SIZE; pixelY++) {
 						pixelColor = new Color(tileset.getRGB(pixelX, pixelY));
-						if(pixelColor.getRed() > 0 && pixelColor.getBlue() == 0)
+						if(pixelColor.getRed() > 0 && pixelColor.getBlue() == 0) {
 							solidFlag = true;
+							tileset.setRGB(pixelX, pixelY, Color.WHITE.getRGB());
+						}
 					}
 				}
 				if(solidFlag)
