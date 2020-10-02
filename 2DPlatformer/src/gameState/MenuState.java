@@ -24,8 +24,8 @@ public class MenuState extends GameState {
 
 	public MenuState(GameStateManager gameStateManager) {
 		super(gameStateManager);
-		bg = Assets.MENU_BG;
-		bg.setVector(-0.5, 0);
+		bg = Assets.WATER_BG;
+		bg.setVector(-0.5);
 
 		titleColor = Color.BLACK;
 		titleFont = new Font("Century Gothic", Font.PLAIN, 20);

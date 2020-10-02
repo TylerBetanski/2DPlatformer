@@ -14,8 +14,8 @@ public class Level1State extends LevelState {
 
 	@Override
 	public void init() {
-		tileMap = new TileMap("Resources/Maps/testLevel.lvlData");
-		bg = Assets.GRADIENT_BG;
+		tileMap = new TileMap("Resources/Maps/testLevel.tilemap");
+		bg = Assets.WATER_BG;
 	}
 
 	@Override
