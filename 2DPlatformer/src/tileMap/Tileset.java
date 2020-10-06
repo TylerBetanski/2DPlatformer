@@ -38,8 +38,6 @@ public class Tileset {
 			String[] tokens = tileData.split("\\s+");
 			for(int y = 0; y < tileset.getHeight() / Tile.TILE_SIZE; y++) {
 				for(int x = 0; x < tileset.getWidth() / Tile.TILE_SIZE; x++) {
-					System.out.println(x + ", " + y);
-					System.out.println(x + y);
 					tiles[x + y*(tileset.getWidth() / Tile.TILE_SIZE)] = new Tile(new Texture(tileset.getSubimage(x * Tile.TILE_SIZE, y * Tile.TILE_SIZE,Tile.TILE_SIZE, Tile.TILE_SIZE)), Integer.parseInt(tokens[x + x*y]) == 1);
 				}
 			}

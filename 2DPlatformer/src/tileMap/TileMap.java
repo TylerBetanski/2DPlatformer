@@ -3,6 +3,7 @@ package tileMap;
 import java.awt.Graphics2D;
 
 import assets.Assets;
+import gfx.Camera;
 import utils.Utils;
 
 public class TileMap {
@@ -28,11 +29,12 @@ public class TileMap {
 		}
 	}
 	
-	public void draw(Graphics2D g) {
+	public void draw(Graphics2D g, Camera camera) {
 		for(int x = 0; x < tiles.length; x++) {
 			for(int y = 0; y < tiles[x].length; y++) {
 				if(tiles[x][y] != null)
-					tiles[x][y].draw(g, x * Tile.TILE_SIZE, y * Tile.TILE_SIZE);
+					if(camera.inBounds(x * Tile.TILE_SIZE, y * Tile.TILE_SIZE))
+						tiles[x][y].draw(g, x * Tile.TILE_SIZE, y * Tile.TILE_SIZE);
 			}
 		}
 	}

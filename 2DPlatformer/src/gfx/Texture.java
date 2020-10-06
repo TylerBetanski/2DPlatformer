@@ -10,6 +10,10 @@ public class Texture {
 		this.texture = texture;
 	}
 	
+	public Texture(Texture texture) {
+		this.texture = texture.getTexure();
+	}
+	
 	public void draw(Graphics2D g, int x, int y, int width, int height) {
 		g.drawImage(texture, x, y, width, height, null);
 	}
@@ -20,17 +24,9 @@ public class Texture {
 	
 	public void update() {}
 	
-	protected void setTexture(BufferedImage image) {
-		texture = image;
-	}
-	
-	public int getWidth()
-	{
-		return texture.getWidth();
-	}
-	
-	public int getHeight()
-	{
-		return texture.getHeight();
-	}
+	public BufferedImage getTexure() { return texture; }
+	protected void setTexture(BufferedImage image) { texture = image; }
+	protected void setTexture(Texture texture) { this.texture = texture.getTexure(); }
+	public int getWidth() { return texture.getWidth(); }
+	public int getHeight() { return texture.getHeight(); }
 }

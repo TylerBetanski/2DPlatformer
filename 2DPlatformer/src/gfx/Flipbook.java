@@ -1,25 +1,30 @@
 package gfx;
 
-import java.awt.image.BufferedImage;
-
 public class Flipbook {
-	private BufferedImage[] frames;
+	private Texture[] textures;
 	private int[] frameCount;
 
-	public Flipbook(BufferedImage[] frames, int[] frameCount) {
-		this.frames = frames;
+	public Flipbook(Spritesheet spriteSheet, int[] frameCount) {
 		this.frameCount = frameCount;
-	}
-
-	public Flipbook(BufferedImage[] frames) {
-		this.frames = frames;
-		frameCount = new int[frames.length];
-		for(int i = 0; i < frameCount.length; i++) {
-			frameCount[i] = 1;
+		textures = new Texture[spriteSheet.getLength()];
+		for(int i = 0; i < spriteSheet.getLength(); i++) {
+			textures[i] = new Texture(spriteSheet.getImageAtIndex(i));
 		}
 	}
 
-	public BufferedImage[] getFrames() { return frames; }
+	public Flipbook(Spritesheet spriteSheet) {
+		frameCount = new int[spriteSheet.getLength()];
+		for(int i = 0; i < frameCount.length; i++) {
+			frameCount[i] = 1;
+		}
+		textures = new Texture[spriteSheet.getLength()];
+		for(int i = 0; i < spriteSheet.getLength(); i++) {
+			textures[i] = new Texture(spriteSheet.getImageAtIndex(i));
+		}
+	}
+
+	public Texture[] getTextures() { return textures; }
+	public Texture getTextureAtIndex(int index) { return textures[index]; }
 	public int[] getFrameCount() { return frameCount; }
 
 }

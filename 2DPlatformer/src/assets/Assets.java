@@ -2,7 +2,10 @@ package assets;
 
 import java.util.ArrayList;
 
+import gfx.AnimatedTexture;
 import gfx.Background;
+import gfx.Flipbook;
+import gfx.Spritesheet;
 import tileMap.Tileset;
 
 public class Assets {
@@ -17,6 +20,11 @@ public class Assets {
 	// Tilesets
 	public static final ArrayList<Tileset> TILESETS = new ArrayList<Tileset>();
 	public static final Tileset GRASS_TILESET = addTileset(TILESETS, new Tileset("/Tilesets/grassTileset.png", false));
+	
+	// Textures
+	public static final Spritesheet DEMON_SHEET = new Spritesheet("/textures/demon.png", 16, 16);
+	public static final Flipbook DEMON_FLIPBOOK = new Flipbook(DEMON_SHEET);
+	public static final AnimatedTexture DEMON = new AnimatedTexture(DEMON_FLIPBOOK);
 
 	public void init() {
 		
