@@ -34,7 +34,7 @@ public class TileMap {
 			for(int y = 0; y < tiles[x].length; y++) {
 				if(tiles[x][y] != null)
 					if(camera.inBounds(x * Tile.TILE_SIZE, y * Tile.TILE_SIZE))
-						tiles[x][y].draw(g, x * Tile.TILE_SIZE, y * Tile.TILE_SIZE);
+						tiles[x][y].draw(g, x * Tile.TILE_SIZE - camera.getX(), y * Tile.TILE_SIZE - camera.getY());
 			}
 		}
 	}

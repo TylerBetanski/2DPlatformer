@@ -15,7 +15,7 @@ public class AnimatedTexture extends Texture {
 		if(count >= flipbook.getFrameCount()[currentIndex]) {
 			count = 0;
 			
-			setTexture(flipbook.getTextureAtIndex(currentIndex));
+			setImage(flipbook.getTextureAtIndex(currentIndex));
 			
 			if(currentIndex == flipbook.getFrameCount().length - 1)
 				currentIndex = 0;
