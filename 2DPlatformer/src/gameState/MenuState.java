@@ -24,7 +24,7 @@ public class MenuState extends GameState {
 
 	public MenuState(GameStateManager gameStateManager) {
 		super(gameStateManager);
-		bg = Assets.WATER_BG;
+		bg = new Background(Assets.WATER_BG);
 		bg.setVector(-0.5);
 
 		titleColor = Color.BLACK;

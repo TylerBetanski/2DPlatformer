@@ -34,6 +34,7 @@ public abstract class Entity {
 		this.y = y;
 		this.width = width;
 		this.height = height;
+		bounds = new Rectangle(0, 0, width, height);
 	}
 
 	public Entity(GameStateManager gsm, Texture tex, double x, double y, int width, int height, Rectangle bounds, boolean solid) {

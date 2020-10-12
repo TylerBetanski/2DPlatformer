@@ -9,6 +9,13 @@ public class AnimatedTexture extends Texture {
 		this.flipbook = flipbook;
 	}
 	
+	public AnimatedTexture(AnimatedTexture texture, boolean copyCurrentIndex) {
+		super(texture.getFlipbook().getTextureAtIndex(texture.getCurrentIndex()));
+		flipbook = texture.getFlipbook();
+		if(!copyCurrentIndex)
+			setImage(flipbook.getTextureAtIndex(0));
+	}
+	
 	private int count = 0;
 	@Override
 	public void update() { // Called once every frame
@@ -24,5 +31,8 @@ public class AnimatedTexture extends Texture {
 		}
 		count++;
 	}
+	
+	public Flipbook getFlipbook() { return new Flipbook(flipbook); }
+	public int getCurrentIndex() { return currentIndex; }
 
 }

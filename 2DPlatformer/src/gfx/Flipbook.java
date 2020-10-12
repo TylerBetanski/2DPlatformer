@@ -23,8 +23,23 @@ public class Flipbook {
 		}
 	}
 
-	public Texture[] getTextures() { return textures; }
-	public Texture getTextureAtIndex(int index) { return textures[index]; }
+	public Flipbook(Flipbook flipbook) {
+		textures = flipbook.getTextures();
+		frameCount = flipbook.getFrameCount();
+	}
+
+	public Texture[] getTextures() { 
+		Texture[] temp = new Texture[textures.length];
+		for(int i = 0; i < temp.length; i++) {
+			temp[i] = new Texture(textures[i].getImage());
+		}
+		return temp; 
+	}
+	
+	public Texture getTextureAtIndex(int index) {
+		return new Texture(textures[index].getImage()); 
+	}
+	
 	public int[] getFrameCount() { return frameCount; }
 
 }

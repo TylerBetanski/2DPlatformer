@@ -1,5 +1,6 @@
 package tileMap;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 
 import assets.Assets;
@@ -28,17 +29,22 @@ public class TileMap {
 			}
 		}
 	}
-	
+
 	public void draw(Graphics2D g, Camera camera) {
 		for(int x = 0; x < tiles.length; x++) {
 			for(int y = 0; y < tiles[x].length; y++) {
-				if(tiles[x][y] != null)
-					if(camera.inBounds(x * Tile.TILE_SIZE, y * Tile.TILE_SIZE))
-						tiles[x][y].draw(g, x * Tile.TILE_SIZE - camera.getX(), y * Tile.TILE_SIZE - camera.getY());
+				if(tiles[x][y] != null) {
+					if(camera.inBounds(x * Tile.TILE_SIZE, y * Tile.TILE_SIZE)) {
+						tiles[x][y].draw(g, x * Tile.TILE_SIZE - (int)camera.getX(), y * Tile.TILE_SIZE - (int)camera.getY());
+						g.setColor(Color.RED);
+						if(tiles[x][y].isSolid())
+							g.drawRect(x * Tile.TILE_SIZE - (int)camera.getX(), y * Tile.TILE_SIZE - (int)camera.getY(), Tile.TILE_SIZE, Tile.TILE_SIZE);
+					}
+				}
 			}
 		}
 	}
-	
+
 	public void update() {
 		for(Tile[] tileArray: tiles) {
 			for(Tile tile: tileArray) {
@@ -46,8 +52,14 @@ public class TileMap {
 			}
 		}
 	}
-	
+
 	public Tile getTile(int x, int y) {
-		return tiles[(int)(x / Tile.TILE_SIZE)][(int)(y / Tile.TILE_SIZE)];
+		if(x / Tile.TILE_SIZE >= 0 && y / Tile.TILE_SIZE >= 0 && x / Tile.TILE_SIZE < tiles.length && y / Tile.TILE_SIZE < tiles[0].length) {
+			if(tiles[(int)(x / Tile.TILE_SIZE)][(int)(y / Tile.TILE_SIZE)] != null)
+				return tiles[(int)(x / Tile.TILE_SIZE)][(int)(y / Tile.TILE_SIZE)];
+			else
+				return new AirTile();
+		}
+		return new AirTile();
 	}
 }
