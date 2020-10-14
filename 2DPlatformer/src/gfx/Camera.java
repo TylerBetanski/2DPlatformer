@@ -1,8 +1,12 @@
 package gfx;
 
 import entity.Entity;
+import gameState.GameStateManager;
+import gameState.Level1State;
+import gameState.LevelState;
 import main.GamePanel;
-import tileMap.Tile;
+import tiles.Tile;
+import tiles.TileMap;
 
 public class Camera {
 	private double x, y;
@@ -10,7 +14,10 @@ public class Camera {
 	private double speed;
 	private Entity focusedEntity;
 	
-	public Camera(int x, int y, double speed) {
+	private GameStateManager gsm;
+	
+	public Camera(GameStateManager gsm, int x, int y, double speed) {
+		this.gsm = gsm;
 		this.x = x;
 		this.y = y;
 		this.targetX = x;
@@ -27,7 +34,7 @@ public class Camera {
 		}
 		double scalar = 1.0;
 		if(x > targetX) {
-			scalar = -1;
+			scalar = -1.0;
 			if(x + scalar * speed < targetX)
 				x = targetX;
 			else
@@ -38,9 +45,10 @@ public class Camera {
 			else
 				x = x + scalar * speed;
 		}
-		/*
+		
+		scalar = 1.0;
 		if(y > targetY) {
-			scalar = -1;
+			scalar = -1.0;
 			if(y + scalar * speed < targetY)
 				y = targetY;
 			else
@@ -51,7 +59,20 @@ public class Camera {
 			else
 				y = (int)(y + scalar * speed);
 		}
-		*/
+		
+		
+		if(x < 0) {
+			x = 0;
+		} else if (x + GamePanel.WIDTH > ((LevelState)gsm.getCurrentState()).getTileMap().getWidth()) {
+			x = ((LevelState)gsm.getCurrentState()).getTileMap().getWidth() - GamePanel.WIDTH;
+		}
+		
+		if(y < 0) {
+			y = 0;
+		} else if (y + GamePanel.HEIGHT > ((LevelState)gsm.getCurrentState()).getTileMap().getHeight()) {
+			y = ((LevelState)gsm.getCurrentState()).getTileMap().getHeight() - GamePanel.HEIGHT;
+		}
+		
 	}
 	
 	public boolean inBounds(int x, int y) {

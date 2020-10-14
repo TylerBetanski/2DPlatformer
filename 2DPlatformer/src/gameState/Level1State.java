@@ -7,7 +7,7 @@ import entity.creatures.Creature;
 import gfx.AnimatedTexture;
 import gfx.Background;
 import gfx.Camera;
-import tileMap.TileMap;
+import tiles.TileMap;
 
 public class Level1State extends LevelState {
 	Creature demon;
@@ -21,10 +21,12 @@ public class Level1State extends LevelState {
 	public void init() {
 		tileMap = new TileMap("Resources/Maps/testLevel.tilemap");
 		bg = new Background(Assets.WATER_BG);
-		camera = new Camera(0,0,1);
-		camera.setTarget(500, 0);
+		camera = new Camera(gameStateManager, 100,0,1);
+		//camera.setTarget(500, 200);
+		gravityScale = 2;
 		
-		demon = new Creature(gameStateManager, new AnimatedTexture(Assets.DEMON, false), 32, 32, 16, 16, 1, 1);
+		demon = new Creature(gameStateManager, new AnimatedTexture(Assets.DEMON, false), 32, 32, 1, 1, 1, true);
+		camera.setFocusedEntity(demon);
 	}
 
 	@Override

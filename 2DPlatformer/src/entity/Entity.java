@@ -8,7 +8,7 @@ import gameState.GameStateManager;
 import gameState.LevelState;
 import gfx.Camera;
 import gfx.Texture;
-import tileMap.Tile;
+import tiles.Tile;
 
 public abstract class Entity {
 
@@ -23,29 +23,26 @@ public abstract class Entity {
 
 	protected Texture tex;
 	protected double x, y;
-	protected int width, height;
 	protected Rectangle bounds;
 	protected boolean solid;
 
-	public Entity(GameStateManager gsm, Texture tex, double x, double y, int width, int height) {
+
+	public Entity(GameStateManager gsm, Texture tex, double x, double y, boolean solid) {
 		this.gsm = gsm;
 		this.tex = tex;
 		this.x = x;
 		this.y = y;
-		this.width = width;
-		this.height = height;
-		bounds = new Rectangle(0, 0, width, height);
+		this.solid = solid;
+		bounds = new Rectangle(0, 0, tex.getWidth(), tex.getHeight());
 	}
 
-	public Entity(GameStateManager gsm, Texture tex, double x, double y, int width, int height, Rectangle bounds, boolean solid) {
+	public Entity(GameStateManager gsm, Texture tex, double x, double y, Rectangle bounds) {
 		this.gsm = gsm;
 		this.tex = tex;
 		this.x = x;
 		this.y = y;
-		this.width = width;
-		this.height = height;
 		this.bounds = bounds;
-		this.solid = solid;
+		this.solid = true;
 	}
 
 	public boolean intersects(Entity object) {
@@ -110,8 +107,8 @@ public abstract class Entity {
 	public Texture getTexture() { return tex; }
 	public double getX() { return x; }
 	public double getY() { return y; }
-	public int getWidth() { return width; }
-	public int getHeight() { return height; }
+	public int getWidth() { return (int)bounds.getWidth(); }
+	public int getHeight() { return (int)bounds.getHeight(); }
 	public Rectangle getBounds() { return bounds; }
 	public boolean isSolid() { return solid; }
 }

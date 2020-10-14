@@ -6,7 +6,7 @@ import gfx.AnimatedTexture;
 import gfx.Background;
 import gfx.Flipbook;
 import gfx.Spritesheet;
-import tileMap.Tileset;
+import tiles.Tileset;
 
 public class Assets {
 	
