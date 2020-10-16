@@ -1,6 +1,7 @@
 package gameState;
 
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 
 import assets.Assets;
 import entity.creatures.Creature;
@@ -21,11 +22,11 @@ public class Level1State extends LevelState {
 	public void init() {
 		tileMap = new TileMap("Resources/Maps/testLevel.tilemap");
 		bg = new Background(Assets.WATER_BG);
-		camera = new Camera(gameStateManager, 100,0,1);
+		camera = new Camera(gameStateManager, 0,0,1);
 		//camera.setTarget(500, 200);
-		gravityScale = 2;
+		gravityScale = 1;
 		
-		demon = new Creature(gameStateManager, new AnimatedTexture(Assets.DEMON, false), 32, 32, 1, 1, 1, true);
+		demon = new Creature(gameStateManager, new AnimatedTexture(Assets.DEMON, false), 32, 32, new Rectangle(4,4,8,8), 1, 1, 1);
 		camera.setFocusedEntity(demon);
 	}
 

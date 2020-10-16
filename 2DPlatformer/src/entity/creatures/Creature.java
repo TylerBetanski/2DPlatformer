@@ -9,6 +9,7 @@ import gameState.GameStateManager;
 import gameState.LevelState;
 import gfx.Camera;
 import gfx.Texture;
+import tiles.Tile;
 
 public class Creature extends Entity {
 	protected int health, maxHealth;
@@ -26,7 +27,7 @@ public class Creature extends Entity {
 		localGravityScale = gravityScale;
 		if(localGravityScale != 0)
 			affectedByGravity = true;
-		moveFactorX = 1;
+		moveFactorX = 0;
 		moveFactorY = 0;
 	}
 
@@ -43,94 +44,84 @@ public class Creature extends Entity {
 	
 	private void moveX(Entity.Direction direction, double moveSpeed) {
 		if(direction == Entity.Direction.RIGHT) {
-			if(!checkMapCollision(direction))
+			if(checkMapCollisionSimple((int)(x + moveSpeed), (int)y)) {
 				x += moveSpeed;
+			} else {
+				x = Math.ceil(((x + moveSpeed)) / Tile.TILE_SIZE) * Tile.TILE_SIZE - bounds.getX() - bounds.getWidth();
+			}
 		} else {
-			if(!checkMapCollision(direction))
+			if(checkMapCollisionSimple((int)(x - moveSpeed), (int)y)) {
 				x -= moveSpeed;
+			} else {
+				x = Math.floor(((x - moveSpeed)) / Tile.TILE_SIZE) * Tile.TILE_SIZE + Tile.TILE_SIZE - bounds.getX();
+			}
 		}
 	}
 	
 	private void moveY(Entity.Direction direction, double moveSpeed) {
 		if(direction == Entity.Direction.UP) {
-			if(!checkMapCollision(direction))
-				y += moveSpeed;
-		} else {
-			if(!checkMapCollision(direction))
+			if(checkMapCollisionSimple((int)x, (int)(y - moveSpeed))) {
 				y -= moveSpeed;
-		}
-	}
-
-	private void move() {
-		if(moveFactorX != 0) {
-			Entity.Direction xDirection = Entity.Direction.RIGHT;
-
-			if(moveFactorX > 0)
-				xDirection = Entity.Direction.RIGHT;
-			else if(moveFactorX < 0)
-				xDirection = Entity.Direction.RIGHT;
-
-			if(!checkMapCollision(xDirection)) {
-				x = x + moveFactorX * speed;
+			} else {
+				y = Math.ceil(((y - moveSpeed)) / Tile.TILE_SIZE) * Tile.TILE_SIZE - bounds.getY();
 			}
-		}
-		
-		if(moveFactorY != 0) {
-			Entity.Direction yDirection = Entity.Direction.LEFT;
-
-
-			if(moveFactorY > 0)
-				yDirection = Entity.Direction.DOWN;
-			else if(moveFactorY < 0)
-				yDirection = Entity.Direction.UP;
-
-			if(!checkMapCollision(yDirection)) {
-				y = y + moveFactorY * speed;
+		} else {
+			if(checkMapCollisionSimple((int)x, (int)(y + moveSpeed))) {
+				y += moveSpeed;
+			} else {
+				y = Math.floor(((y + moveSpeed)) / Tile.TILE_SIZE) * Tile.TILE_SIZE + bounds.getY();
 			}
 		}
 	}
 
 	private void gravity() {
 		if(affectedByGravity) {
+			moveY(Entity.Direction.DOWN, ((LevelState)gsm.getCurrentState()).getGravityScale() * localGravityScale);
 			if(!checkMapCollision(Entity.Direction.DOWN)) {
 				if(!jumping)
 					falling = true;
-				y = y + ((LevelState)gsm.getCurrentState()).getGravityScale() * localGravityScale;
-			}
-			falling = false;
-		} else
-			falling = false;
-	}
-	
-	public void jump() {
-		if(!checkMapCollision(Entity.Direction.UP) && !falling) {
-			jumping = true;
-		} else
-			jumping = false;
-	}
-
-	@Override
-	public void update() {
-		// Update Position
-		moveX(Entity.Direction.RIGHT, speed);
-		//gravity();
-
-		tex.update();
-		if(health <= 0)
-			dead = true;
-	}
-
-	@Override
-	public void draw(Graphics2D g, Camera camera) {
-		if(camera.inBounds((int)x, (int)y)) {
-			tex.draw(g, (int)x - (int)camera.getX(), (int)y - (int)camera.getY());
-
-			g.setColor(Color.GREEN);
-			System.out.println("X & Y: "+ x + ", " + y);
-			System.out.println("W & H: "+ bounds.getWidth() + ", " + bounds.getHeight());
-			g.drawRect((int)(x - camera.getX()), (int)(y - camera.getY()), (int)(bounds.getWidth()), (int)(bounds.getHeight()));
-			g.setColor(Color.RED);
-			g.drawRect((int)((x + moveFactorX * speed) - camera.getX()), (int)((y + moveFactorY * speed) - camera.getY()), (int)(bounds.getWidth()), (int)(bounds.getHeight()));
+			} else
+				falling = false;
 		}
 	}
-}
+
+		int jumpPow = jumpPower;
+		public void jump() {
+			if(!checkMapCollision(Entity.Direction.UP) && !falling) {
+				y = y - jumpPow;
+				if(jumpPow > 0)
+					jumpPow--;
+				else {
+					jumping = false;
+					jumpPow = jumpPower;
+				}
+			} else {
+				jumping = false;
+				falling = true;
+			}
+		}
+		
+		@Override
+		public void update() {
+			// Update Position
+			moveX(Entity.Direction.LEFT, 1);
+			gravity();
+			if(jumping)
+				jump();
+			tex.update();
+			if(health <= 0)
+				dead = true;
+		}
+
+		@Override
+		public void draw(Graphics2D g, Camera camera) {
+			if(camera.inBounds((int)x, (int)y)) {
+				tex.draw(g, (int)x - (int)camera.getX(), (int)y - (int)camera.getY());
+
+				g.setColor(Color.red);
+				g.drawRect((int)x + (int)bounds.getX() - (int)camera.getX(), (int)y + (int)bounds.getY()- (int)camera.getY(), 8, 8);
+				System.out.println("X & Y: "+ x + ", " + y);
+				System.out.println("W & H: "+ bounds.getWidth() + ", " + bounds.getHeight());
+			}
+		}
+	}

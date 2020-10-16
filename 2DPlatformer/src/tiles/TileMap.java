@@ -1,6 +1,5 @@
 package tiles;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 
 import assets.Assets;
@@ -36,9 +35,6 @@ public class TileMap {
 				if(tiles[x][y] != null) {
 					if(camera.inBounds(x * Tile.TILE_SIZE, y * Tile.TILE_SIZE)) {
 						tiles[x][y].draw(g, x * Tile.TILE_SIZE - (int)camera.getX(), y * Tile.TILE_SIZE - (int)camera.getY());
-						g.setColor(Color.RED);
-						if(tiles[x][y].isSolid())
-							g.drawRect(x * Tile.TILE_SIZE - (int)camera.getX(), y * Tile.TILE_SIZE - (int)camera.getY(), Tile.TILE_SIZE, Tile.TILE_SIZE);
 					}
 				}
 			}

@@ -72,6 +72,14 @@ public abstract class Entity {
 		}
 		return false;
 	}
+	
+	// Check collision based on 4 corners of bounds
+	public boolean checkMapCollisionSimple(int x, int y) {
+		return(!((LevelState)gsm.getCurrentState()).getTileMap().getTile(x + (int)(bounds.getX()),y + (int)(bounds.getY())).isSolid()
+				&&!((LevelState)gsm.getCurrentState()).getTileMap().getTile(x + (int)(bounds.getX() + bounds.getWidth()),y + (int)(bounds.getY())).isSolid()
+				&&!((LevelState)gsm.getCurrentState()).getTileMap().getTile(x + (int)(bounds.getX()),y + (int)(bounds.getY() + bounds.getHeight())).isSolid()
+				&&!((LevelState)gsm.getCurrentState()).getTileMap().getTile(x + (int)(bounds.getX() + bounds.getWidth()),y + (int)(bounds.getY() + bounds.getHeight())).isSolid());
+	}
 
 	// Check for collision in a specified direction
 	public boolean checkMapCollision(Direction direction) {
