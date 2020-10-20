@@ -30,4 +30,8 @@ public class Keys {
 	public static boolean isPressed(int i) {
 		return keyState[i] && !prevKeyState[i];
 	}
+	
+	public static boolean isHeld(int i) {
+		return keyState[i] && prevKeyState[i];
+	}
 }

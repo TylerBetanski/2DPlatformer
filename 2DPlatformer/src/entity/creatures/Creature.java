@@ -9,6 +9,7 @@ import gameState.GameStateManager;
 import gameState.LevelState;
 import gfx.Camera;
 import gfx.Texture;
+import input.Keys;
 import tiles.Tile;
 
 public class Creature extends Entity {
@@ -41,7 +42,7 @@ public class Creature extends Entity {
 		moveFactorX = 1;
 		moveFactorY = 0;
 	}
-	
+
 	private void moveX(Entity.Direction direction, double moveSpeed) {
 		if(direction == Entity.Direction.RIGHT) {
 			if(checkMapCollisionSimple((int)(x + moveSpeed), (int)y)) {
@@ -57,7 +58,7 @@ public class Creature extends Entity {
 			}
 		}
 	}
-	
+
 	private void moveY(Entity.Direction direction, double moveSpeed) {
 		if(direction == Entity.Direction.UP) {
 			if(checkMapCollisionSimple((int)x, (int)(y - moveSpeed))) {
@@ -69,59 +70,76 @@ public class Creature extends Entity {
 			if(checkMapCollisionSimple((int)x, (int)(y + moveSpeed))) {
 				y += moveSpeed;
 			} else {
-				y = Math.floor(((y + moveSpeed)) / Tile.TILE_SIZE) * Tile.TILE_SIZE + bounds.getY();
+				y = Math.floor(((y + moveSpeed)) / Tile.TILE_SIZE) * Tile.TILE_SIZE + bounds.getY() - 1;
 			}
 		}
 	}
 
-	private void gravity() {
-		if(affectedByGravity) {
-			moveY(Entity.Direction.DOWN, ((LevelState)gsm.getCurrentState()).getGravityScale() * localGravityScale);
-			if(!checkMapCollision(Entity.Direction.DOWN)) {
-				if(!jumping)
+	public void gravity() {
+			if(!jumping) {
+				if(!checkMapCollision(Entity.Direction.DOWN)) {
 					falling = true;
+					moveY(Entity.Direction.DOWN, ((LevelState)gsm.getCurrentState()).getGravityScale() * localGravityScale);
+				} else
+					falling = false;
+			}
+	}
+
+	public void jump(int jumpPow) {
+		if(!checkMapCollision(Entity.Direction.UP) && !falling) {
+			if(jumpPow > 0) {
+				y -= jumpPow + ((LevelState)gsm.getCurrentState()).getGravityScale() * localGravityScale;
+				jump(jumpPow - 1);
 			} else
-				falling = false;
-		}
-	}
-
-		int jumpPow = jumpPower;
-		public void jump() {
-			if(!checkMapCollision(Entity.Direction.UP) && !falling) {
-				y = y - jumpPow;
-				if(jumpPow > 0)
-					jumpPow--;
-				else {
-					jumping = false;
-					jumpPow = jumpPower;
-				}
-			} else {
 				jumping = false;
-				falling = true;
-			}
-		}
-		
-		@Override
-		public void update() {
-			// Update Position
-			moveX(Entity.Direction.LEFT, 1);
-			gravity();
-			if(jumping)
-				jump();
-			tex.update();
-			if(health <= 0)
-				dead = true;
-		}
-
-		@Override
-		public void draw(Graphics2D g, Camera camera) {
-			if(camera.inBounds((int)x, (int)y)) {
-				tex.draw(g, (int)x - (int)camera.getX(), (int)y - (int)camera.getY());
-
-				g.setColor(Color.red);
-				g.drawRect((int)x + (int)bounds.getX() - (int)camera.getX(), (int)y + (int)bounds.getY()- (int)camera.getY(), 8, 8);
-				System.out.println("X & Y: "+ x + ", " + y);
-				System.out.println("W & H: "+ bounds.getWidth() + ", " + bounds.getHeight());
-			}
+		} else {
+			jumping = false;
+			falling = true;
 		}
 	}
+
+	public void jump2() {
+		if(!jumping && !falling) {
+			jumping = true;
+			y -= 5;
+		}
+	}
+
+
+	@Override
+	public void update() {
+		handleInput();
+
+		// Update Position
+		if(affectedByGravity)
+			gravity();
+		tex.update();
+		if(health <= 0)
+			dead = true;
+	}
+
+	public void handleInput() {
+		if(Keys.isHeld(Keys.LEFT)) {
+			moveX(Entity.Direction.LEFT, 1);
+		}
+		if(Keys.isHeld(Keys.RIGHT)) {
+			moveX(Entity.Direction.RIGHT, 1);
+		}
+		if(Keys.isPressed(Keys.UP)) {
+			jump(5);
+		}
+
+	}
+
+	@Override
+	public void draw(Graphics2D g, Camera camera) {
+		if(camera.inBounds((int)x, (int)y)) {
+			tex.draw(g, (int)x - (int)camera.getX(), (int)y - (int)camera.getY());
+
+			g.setColor(Color.red);
+			g.drawRect((int)x + (int)bounds.getX() - (int)camera.getX(), (int)y + (int)bounds.getY()- (int)camera.getY(), (int)bounds.getWidth(), (int)bounds.getHeight());
+			//System.out.println("X & Y: "+ x + ", " + y);
+			//System.out.println("W & H: "+ bounds.getWidth() + ", " + bounds.getHeight());
+		}
+	}
+}

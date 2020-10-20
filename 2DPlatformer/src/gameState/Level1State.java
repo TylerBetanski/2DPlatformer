@@ -26,7 +26,7 @@ public class Level1State extends LevelState {
 		//camera.setTarget(500, 200);
 		gravityScale = 1;
 		
-		demon = new Creature(gameStateManager, new AnimatedTexture(Assets.DEMON, false), 32, 32, new Rectangle(4,4,8,8), 1, 1, 1);
+		demon = new Creature(gameStateManager, new AnimatedTexture(Assets.DEMON, false), 32, 32, new Rectangle(0,0,16,16), 1, 1, 1);
 		camera.setFocusedEntity(demon);
 	}
 

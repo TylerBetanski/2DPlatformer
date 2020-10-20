@@ -28,7 +28,7 @@ public class MenuState extends GameState {
 		bg.setVector(-0.5);
 
 		titleColor = Color.BLACK;
-		titleFont = new Font("Century Gothic", Font.PLAIN, 20);
+		titleFont = new Font("Century Gothic", Font.PLAIN, 15);
 		font = new Font("Arial", Font.PLAIN, 12);
 	}
 
@@ -49,7 +49,7 @@ public class MenuState extends GameState {
 		// Draw Title
 		g.setColor(titleColor);
 		g.setFont(titleFont);
-		g.drawString("Independent Study", 80, 70);
+		g.drawString("Independent Study", 22, 30);
 
 		// Draw Menu options
 		for(int i = 0; i < options.length; i++) {
@@ -58,11 +58,11 @@ public class MenuState extends GameState {
 			else
 				g.setColor(Color.BLACK);
 			g.setFont(font);
-			g.drawString(options[i], 145, 140 + i * 15);
+			g.drawString(options[i], 22, 60 + i * 20);
 		}
 	}
 	
-	public  void handleInput() {
+	public void handleInput() {
 		if(Keys.isPressed(Keys.ACTION1)) 
 			select();
 		if(Keys.isPressed(Keys.UP)) {

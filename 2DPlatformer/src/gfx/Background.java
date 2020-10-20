@@ -33,7 +33,7 @@ public class Background {
 	}
 
 	public void update() {
-		System.out.println("Background: " + x + ", " + y);
+		//System.out.println("Background: " + x + ", " + y);
 		texture.update();
 		x += vector;
 	}

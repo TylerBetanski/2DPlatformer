@@ -26,7 +26,7 @@ public class Camera {
 	}
 	
 	public void update() {
-		System.out.println("Camera: " + x + ", " + y);
+		//System.out.println("Camera: " + x + ", " + y);
 		
 		if(focusedEntity != null) {
 			setTarget((int)((focusedEntity.getX() + focusedEntity.getWidth() / 2) - (GamePanel.WIDTH / 2)),
