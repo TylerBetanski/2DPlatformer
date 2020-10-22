@@ -20,6 +20,7 @@ public class Assets {
 	// Tilesets
 	public static final ArrayList<Tileset> TILESETS = new ArrayList<Tileset>();
 	public static final Tileset GRASS_TILESET = addTileset(TILESETS, new Tileset("/Tilesets/grassTileset.png", false));
+	public static final Tileset FLOOR_TILESET = addTileset(TILESETS, new Tileset("/Tilesets/floorsTileset.png", false));
 	
 	// Textures
 	public static final Spritesheet DEMON_SHEET = new Spritesheet("/textures/demon.png", 16, 16);
