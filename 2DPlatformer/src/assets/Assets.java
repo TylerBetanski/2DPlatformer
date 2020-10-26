@@ -7,6 +7,7 @@ import gfx.Background;
 import gfx.Flipbook;
 import gfx.Spritesheet;
 import tiles.Tileset;
+import utils.Utils;
 
 public class Assets {
 	
@@ -23,12 +24,12 @@ public class Assets {
 	public static final Tileset FLOOR_TILESET = addTileset(TILESETS, new Tileset("/Tilesets/floorsTileset.png", false));
 	
 	// Textures
-	public static final Spritesheet DEMON_SHEET = new Spritesheet("/textures/demon.png", 16, 16);
+	public static final Spritesheet DEMON_SHEET = new Spritesheet("/Textures/demon.png", 16, 16);
 	public static final Flipbook DEMON_FLIPBOOK = new Flipbook(DEMON_SHEET);
 	public static final AnimatedTexture DEMON = new AnimatedTexture(DEMON_FLIPBOOK);
 
-	public void init() {
-		
+	public static void init() {
+		//Utils.convertImageToTilemap(Utils.loadImage("/Maps/testLevel2.png"));
 	}
 	
 	public static Tileset addTileset(ArrayList<Tileset> arrayList, Tileset tileset) {

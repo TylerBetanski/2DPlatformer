@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
+import assets.Assets;
 import gameState.GameStateManager;
 import input.Keys;
 
@@ -16,8 +17,8 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 	private static final long serialVersionUID = 1L;
 
 	// Dimensions
-	public static final int WIDTH = 160;
-	public static final int HEIGHT = 128;
+	public static final int WIDTH = 320;
+	public static final int HEIGHT = 192;
 	public final int SCALE = 4;
 
 	// Game Thread
@@ -50,12 +51,16 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 	}
 
 	private void init() {
+
+		
 		image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 		g = (Graphics2D)image.getGraphics();
 
 		running = true;
 		
 		gsm = new GameStateManager();
+		
+		Assets.init();
 	}
 
 	@Override

@@ -20,7 +20,7 @@ public class Level1State extends LevelState {
 
 	@Override
 	public void init() {
-		tileMap = new TileMap("Resources/Maps/testLevel.tilemap");
+		tileMap = new TileMap("Resources/Maps/testLevel2.tilemap");
 		bg = new Background(Assets.WATER_BG);
 		camera = new Camera(gameStateManager, 0,0,1);
 		//camera.setTarget(500, 200);
