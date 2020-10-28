@@ -18,6 +18,23 @@ public class Spritesheet {
 			}
 		}
 	}
+	
+	public Spritesheet(String loc) {
+		BufferedImage image = Utils.loadImage(loc);
+		String file = Utils.loadFileAsString("Resources" + loc.substring(0, loc.indexOf(".")) + ".spritedata");
+		String[] tokens = file.split("\\R");
+		images = new BufferedImage[tokens.length];
+		for(int i = 0; i < tokens.length; i++) {
+			System.out.println(i);
+			System.out.println(tokens[i]);
+			int startX = Integer.parseInt(tokens[i].split("/")[0].split(",")[0]);
+			int startY = Integer.parseInt(tokens[i].split("/")[0].split(",")[1]);
+			int width  = Integer.parseInt(tokens[i].split("/")[1].split(",")[0]);
+			int height  = Integer.parseInt(tokens[i].split("/")[1].split(",")[1]);
+
+			images[i] = image.getSubimage(startX, startY, width, height);
+		}
+	}
 
 	public BufferedImage[] getImages() { return images; }
 	public BufferedImage getImageAtIndex(int index) { return images[index]; }

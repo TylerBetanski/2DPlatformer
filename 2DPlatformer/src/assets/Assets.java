@@ -27,6 +27,10 @@ public class Assets {
 	public static final Spritesheet DEMON_SHEET = new Spritesheet("/Textures/demon.png", 16, 16);
 	public static final Flipbook DEMON_FLIPBOOK = new Flipbook(DEMON_SHEET);
 	public static final AnimatedTexture DEMON = new AnimatedTexture(DEMON_FLIPBOOK);
+	
+	public static final Spritesheet PLAYER_SHEET = new Spritesheet("/Textures/player_spritesheet.png");
+	public static final Flipbook PLAYER_FLIPBOOK = new Flipbook(PLAYER_SHEET);
+	public static final AnimatedTexture PLAYER = new AnimatedTexture(PLAYER_FLIPBOOK);
 
 	public static void init() {
 		//Utils.convertImageToTilemap(Utils.loadImage("/Maps/testLevel2.png"));
