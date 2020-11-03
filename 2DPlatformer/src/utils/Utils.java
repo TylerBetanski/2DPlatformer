@@ -9,6 +9,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import assets.Assets;
+import gfx.Texture;
 import tiles.Tile;
 
 public class Utils {
@@ -79,6 +80,17 @@ public class Utils {
 			}
 			System.out.println();
 		}
+	}
+	
+	public static Texture flipTexture(Texture texture) {
+		BufferedImage flippedImage = new BufferedImage(texture.getImage().getWidth(), texture.getImage().getHeight(), BufferedImage.TYPE_INT_ARGB);
+		for(int x = 0; x < flippedImage.getWidth(); x++) {
+			for(int y = 0; y < flippedImage.getHeight(); y++) {
+				flippedImage.setRGB(x, y, texture.getImage().getRGB(flippedImage.getWidth() - x - 1, y));
+			}
+		}
+		
+		return new Texture(flippedImage);
 	}
 
 }

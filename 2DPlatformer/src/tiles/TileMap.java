@@ -1,5 +1,6 @@
 package tiles;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 
 import assets.Assets;
@@ -32,13 +33,31 @@ public class TileMap {
 	public void draw(Graphics2D g, Camera camera) {
 		for(int x = 0; x < tiles.length; x++) {
 			for(int y = 0; y < tiles[x].length; y++) {
-				if(tiles[x][y] != null) {
+				if(tiles[x][y] != null && tiles[x][y].getClass() != AirTile.class) {
 					if(camera.inBounds(x * Tile.TILE_SIZE, y * Tile.TILE_SIZE)) {
 						tiles[x][y].draw(g, x * Tile.TILE_SIZE - (int)camera.getX(), y * Tile.TILE_SIZE - (int)camera.getY());
+						//drawCollision(g, camera, x, y);
 					}
 				}
 			}
 		}
+	}
+
+	public void drawCollision(Graphics2D g, Camera camera, int x, int y) {
+		g.setColor(Color.RED);
+
+		// No Tile Above
+		if(y > 0 && tiles[x][y-1].getClass() == AirTile.class)
+			g.drawLine(x * Tile.TILE_SIZE, y * Tile.TILE_SIZE, x * Tile.TILE_SIZE + 16, y * Tile.TILE_SIZE);
+		// No Tile Below
+		if(y < tiles[x].length - 1 && tiles[x][y+1].getClass() == AirTile.class)
+			g.drawLine(x * Tile.TILE_SIZE, y * Tile.TILE_SIZE + 16, x * Tile.TILE_SIZE + 16, y * Tile.TILE_SIZE + 16);
+		// No Tile on Left
+		if(x > 0 && tiles[x-1][y].getClass() == AirTile.class)
+			g.drawLine(x * Tile.TILE_SIZE, y * Tile.TILE_SIZE, x * Tile.TILE_SIZE, y * Tile.TILE_SIZE + 16);
+		// No Tile on Right
+		if(x < tiles.length - 1 && tiles[x+1][y].getClass() == AirTile.class)
+			g.drawLine(x * Tile.TILE_SIZE + 16, y * Tile.TILE_SIZE, x * Tile.TILE_SIZE + 16, y * Tile.TILE_SIZE + 16);
 	}
 
 	public void update() {
@@ -58,7 +77,7 @@ public class TileMap {
 		}
 		return new AirTile();
 	}
-	
+
 	public int getWidth() { return tiles.length * Tile.TILE_SIZE; }
 	public int getHeight() { return tiles[0].length * Tile.TILE_SIZE; }
 }

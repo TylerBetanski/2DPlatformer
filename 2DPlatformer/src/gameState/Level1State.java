@@ -5,13 +5,15 @@ import java.awt.Rectangle;
 
 import assets.Assets;
 import entity.creatures.Creature;
+import entity.creatures.player.Player;
 import gfx.AnimatedTexture;
 import gfx.Background;
 import gfx.Camera;
+import gfx.Texture;
 import tiles.TileMap;
 
 public class Level1State extends LevelState {
-	Creature demon;
+	Player player;
 
 	public Level1State(GameStateManager gameStateManager) {
 		super(gameStateManager);
@@ -21,13 +23,13 @@ public class Level1State extends LevelState {
 	@Override
 	public void init() {
 		tileMap = new TileMap("Resources/Maps/testLevel2.tilemap");
-		bg = new Background(Assets.WATER_BG);
+		bg = new Background(Assets.BLANK_BG);
 		camera = new Camera(gameStateManager, 0,0,1);
-		//camera.setTarget(500, 200);
-		gravityScale = 1;
+		camera.setTarget(500, 200);
+		gravityScale = 0.5;
 		
-		demon = new Creature(gameStateManager, new AnimatedTexture(Assets.PLAYER, false), 32, 32, new Rectangle(0,0,16,16), 1, 1, 1);
-		camera.setFocusedEntity(demon);
+		player = new Player(gameStateManager, 32, 96);
+		camera.setFocusedEntity(player);
 	}
 
 	@Override
@@ -35,13 +37,13 @@ public class Level1State extends LevelState {
 		bg.update();
 		tileMap.update();
 		camera.update();
-		demon.update();
+		player.update();
 	}
 
 	@Override
 	public void draw(Graphics2D g) {
 		bg.draw(g, camera);
 		tileMap.draw(g, camera);
-		demon.draw(g, camera);
+		player.draw(g, camera);
 	}
 }

@@ -16,6 +16,11 @@ public class AnimatedTexture extends Texture {
 			setImage(flipbook.getTextureAtIndex(0));
 	}
 	
+	public AnimatedTexture(AnimatedTexture texture) {
+		super(texture.getFlipbook().getTextureAtIndex(0));
+		this.flipbook = texture.getFlipbook();
+	}
+
 	private int count = 0;
 	@Override
 	public void update() { // Called once every frame
@@ -30,6 +35,10 @@ public class AnimatedTexture extends Texture {
 				currentIndex++;
 		}
 		count++;
+	}
+	
+	public void reset() {
+		count = 0;
 	}
 	
 	public Flipbook getFlipbook() { return new Flipbook(flipbook); }
