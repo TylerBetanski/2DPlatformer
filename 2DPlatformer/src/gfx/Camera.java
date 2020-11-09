@@ -2,11 +2,9 @@ package gfx;
 
 import entity.Entity;
 import gameState.GameStateManager;
-import gameState.Level1State;
 import gameState.LevelState;
 import main.GamePanel;
 import tiles.Tile;
-import tiles.TileMap;
 
 public class Camera {
 	private double x, y;

@@ -52,9 +52,13 @@ public class RenderEffect {
 		for(int x = 0; x < image.getWidth(); x++) {
 			for(int y = 0; y < image.getHeight(); y++) {
 				pixelColor = new Color(image.getRGB(x, y));
-				if(!pixelColor.equals(Color.BLACK)) {
-					image.setRGB(x, y, Color.WHITE.getRGB());
-				}
+				int r = pixelColor.getRed();
+				int g = pixelColor.getGreen();
+				int b = pixelColor.getBlue();
+				float[] hsb = Color.RGBtoHSB(r, g, b, null);
+				int brightness = (int)(255 * (hsb[2]/1.0));
+				pixelColor = new Color(brightness, brightness, brightness);
+				image.setRGB(x, y, pixelColor.getRGB());
 			}
 		}
 		

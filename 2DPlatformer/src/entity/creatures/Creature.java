@@ -9,7 +9,7 @@ import gameState.GameStateManager;
 import gameState.LevelState;
 import gfx.Camera;
 import gfx.Texture;
-import input.Keys;
+import main.GamePanel;
 import tiles.Tile;
 
 public abstract class Creature extends Entity {
@@ -45,13 +45,13 @@ public abstract class Creature extends Entity {
 
 	protected void moveX(Entity.Direction direction, double moveSpeed) {
 		if(direction == Entity.Direction.RIGHT) {
-			if(checkMapCollisionSimple((int)(x + moveSpeed), (int)y)) {
+			if(checkMapCollision((int)(x + moveSpeed), (int)y)) {
 				x += moveSpeed;
 			} else {
 				x = Math.ceil(((x + moveSpeed)) / Tile.TILE_SIZE) * Tile.TILE_SIZE - bounds.getX() - bounds.getWidth() - 1;
 			}
 		} else {
-			if(checkMapCollisionSimple((int)(x - moveSpeed), (int)y)) {
+			if(checkMapCollision((int)(x - moveSpeed), (int)y)) {
 				x -= moveSpeed;
 			} else {
 				x = Math.floor(((x - moveSpeed)) / Tile.TILE_SIZE) * Tile.TILE_SIZE + Tile.TILE_SIZE - bounds.getX();
@@ -61,14 +61,14 @@ public abstract class Creature extends Entity {
 
 	protected void moveY(Entity.Direction direction, double moveSpeed) {
 		if(direction == Entity.Direction.UP) {
-			if(checkMapCollisionSimple((int)x, (int)(y - moveSpeed))) {
+			if(checkMapCollision((int)x, (int)(y - moveSpeed))) {
 				y -= moveSpeed;
 			} else {
 				y = Math.ceil(((y - moveSpeed)) / Tile.TILE_SIZE) * Tile.TILE_SIZE - bounds.getY();
 				yVelocity = 0;
 			}
 		} else {
-			if(checkMapCollisionSimple((int)x, (int)(y + moveSpeed))) {
+			if(checkMapCollision((int)x, (int)(y + moveSpeed))) {
 				falling = true;
 				y += moveSpeed;
 			} else {
@@ -106,10 +106,10 @@ public abstract class Creature extends Entity {
 		if(camera.inBounds((int)x, (int)y)) {
 			tex.draw(g, (int)x - (int)camera.getX(), (int)y - (int)camera.getY());
 
-			g.setColor(Color.red);
-			g.drawRect((int)x + (int)bounds.getX() - (int)camera.getX(), (int)y + (int)bounds.getY()- (int)camera.getY(), (int)bounds.getWidth(), (int)bounds.getHeight());
-			//System.out.println("X & Y: "+ x + ", " + y);
-			//System.out.println("W & H: "+ bounds.getWidth() + ", " + bounds.getHeight());
+			if(GamePanel.DEBUG_RENDERBOXES) {
+				g.setColor(Color.red);
+				g.drawRect((int)x + (int)bounds.getX() - (int)camera.getX(), (int)y + (int)bounds.getY()- (int)camera.getY(), (int)bounds.getWidth(), (int)bounds.getHeight());
+			}
 		}
 	}
 }

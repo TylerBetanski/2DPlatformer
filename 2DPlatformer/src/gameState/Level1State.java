@@ -1,15 +1,11 @@
 package gameState;
 
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 
 import assets.Assets;
-import entity.creatures.Creature;
 import entity.creatures.player.Player;
-import gfx.AnimatedTexture;
 import gfx.Background;
 import gfx.Camera;
-import gfx.Texture;
 import tiles.TileMap;
 
 public class Level1State extends LevelState {

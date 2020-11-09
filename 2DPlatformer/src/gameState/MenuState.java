@@ -63,7 +63,7 @@ public class MenuState extends GameState {
 	}
 	
 	public void handleInput() {
-		if(Keys.isPressed(Keys.ACTION1)) 
+		if(Keys.isPressed(Keys.ENTER)) 
 			select();
 		if(Keys.isPressed(Keys.UP)) {
 			if(currentChoice > 0)

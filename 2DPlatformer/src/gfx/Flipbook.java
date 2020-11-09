@@ -28,7 +28,7 @@ public class Flipbook {
 		frameCount = flipbook.getFrameCount();
 	}
 	
-	public Flipbook(Texture textures[], int[] framecount) {
+	public Flipbook(Texture[] textures, int[] framecount) {
 		this.frameCount = framecount;
 		this.textures = new Texture[textures.length];
 		for(int i = 0; i < textures.length; i++) {

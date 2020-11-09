@@ -9,6 +9,8 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import assets.Assets;
+import gfx.AnimatedTexture;
+import gfx.Flipbook;
 import gfx.Texture;
 import tiles.Tile;
 
@@ -89,8 +91,21 @@ public class Utils {
 				flippedImage.setRGB(x, y, texture.getImage().getRGB(flippedImage.getWidth() - x - 1, y));
 			}
 		}
+		Texture returnedTexture = new Texture(flippedImage);
+		returnedTexture.setOrigin(-returnedTexture.getOriginX(), returnedTexture.getOriginY());
 		
 		return new Texture(flippedImage);
 	}
-
+	
+	public static AnimatedTexture flipTexture(AnimatedTexture texture) {
+		Flipbook flipbook = texture.getFlipbook();
+		Texture[] textures = new Texture[flipbook.getTextures().length];
+		int[] frameCounts =  new int[textures.length];
+		for(int i = 0; i < textures.length; i++) {
+			textures[i] = Utils.flipTexture(flipbook.getTextureAtIndex(i));
+			frameCounts[i] = flipbook.getFrameCount()[i];
+		}
+		Flipbook returnedFlipbook = new Flipbook(textures, frameCounts);
+		return new AnimatedTexture(returnedFlipbook);
+	}
 }

@@ -1,7 +1,9 @@
 package entity.creatures.player;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.util.ArrayList;
 
 import assets.Assets;
 import entity.Entity;
@@ -11,27 +13,40 @@ import gfx.AnimatedTexture;
 import gfx.Camera;
 import gfx.Texture;
 import input.Keys;
-import utils.Utils;
+import main.GamePanel;
 
 public class Player extends Creature {
-	private static Texture idleTexture = new Texture(Assets.PLAYER_IDLE);
-	private static Texture crouchTexture = new Texture(Assets.PLAYER_CROUCH);
-	private static AnimatedTexture walkingTexture = new AnimatedTexture(Assets.PLAYER_WALK);
-	private static Texture jumpingTexture = new Texture(Assets.PLAYER_JUMP);
-	private static Texture fallingTexture = new Texture(Assets.PLAYER_FALL);
-	private static AnimatedTexture deathTexture = new AnimatedTexture(Assets.PLAYER_DIE);
-	private static AnimatedTexture attackTexture = new AnimatedTexture(Assets.PLAYER_WALK_ATTACK);
-	private static AnimatedTexture jumpAttackTexture = new AnimatedTexture(Assets.PLAYER_JUMP_ATTACK);
-	private static AnimatedTexture fallAttackTexture = new AnimatedTexture(Assets.PLAYER_FALL_ATTACK);
 
-	private static Rectangle standingBounds = new Rectangle(0, 3, 15, 28);
+	private static ArrayList<Texture> textures = new ArrayList<Texture>();
+	private static Texture idleTexture = new Texture(Assets.PLAYER_IDLE);
+	private static AnimatedTexture walkingTexture = new AnimatedTexture(Assets.PLAYER_WALK);
+	private static Texture jumpTexture = new Texture(Assets.PLAYER_JUMP);
+	private static AnimatedTexture deathTexture = new AnimatedTexture(Assets.PLAYER_DIE);
+	private static AnimatedTexture attackTexture = new AnimatedTexture(Assets.PLAYER_ATTACK);
+	private static AnimatedTexture jumpAttackTexture = new AnimatedTexture(Assets.PLAYER_JUMP_ATTACK);
+	private static  Rectangle standingBounds = new Rectangle(0, 2, 15, 29);
 	private static Rectangle crouchingBounds = new Rectangle(0, 9, 15, 22);
+	private static Rectangle attackBoundsRight = new Rectangle(16, 8, 48, 8);
+	private static Rectangle attackBoundsLeft = new Rectangle(-49, 8, 48, 8);
+	private static Rectangle attackBounds = attackBoundsRight;
 
 	private boolean facingRight = true;
-	private boolean crouched = false;
+	private boolean attacking = false;
+	private boolean crouching = false;
+	private boolean moving = false;
 
 	public Player(GameStateManager gsm, int x, int y) {
 		super(gsm, idleTexture, x, y, standingBounds, true);
+
+		textures.add(idleTexture);
+		textures.add(walkingTexture);
+		textures.add(jumpTexture);
+		textures.add(deathTexture);
+		textures.add(attackTexture);
+		attackTexture.setOrigin(new int[] {16, 16, 0}, new int[] {0, 0, 0});
+		textures.add(jumpAttackTexture);
+		jumpAttackTexture.setOrigin(new int[] {16, 16, 0}, new int[] {-7, -7, -7});
+
 		maxHealth = 5;
 		health = maxHealth;
 		speed = 1.0;
@@ -40,46 +55,87 @@ public class Player extends Creature {
 		jumpPower = 6;
 	}
 
+	private void attack() {
+		if(!attacking) {
+			attacking = true;
+			if(facingRight)
+				attackBounds = attackBoundsRight;
+			else
+				attackBounds = attackBoundsLeft;
+		} else {
+			if(tex.animationEnded()) {
+				attacking = false;
+			}
+		}
+	}
+
 	@Override
 	public void update() {
 		handleInput();
-
-		gravity();
-
-		if(jumping || falling) {
-			bounds = crouchingBounds;
-			tex = crouchTexture;
-		} else
-			bounds = standingBounds;
-
+		updateTextures();
 		tex.update();
+		gravity();
+		
+		if(attacking)
+			attack();
+		 
 		if(health <= 0)
 			dead = true;
 	}
 
+	private void updateTextures() {
+		if(moving && !(jumping || falling || crouching || attacking)) {
+			bounds = standingBounds;
+			tex = walkingTexture;
+		} else if(!moving && !(jumping || falling || crouching || attacking)) {
+			bounds = standingBounds;
+			tex = idleTexture;
+		} else if((jumping || falling || crouching) && !attacking) {
+			bounds = crouchingBounds;
+			tex = jumpTexture;
+		} else if(attacking && !(jumping || falling || crouching)) {
+			bounds = standingBounds;
+			tex = attackTexture;
+		} else if(attacking &&(jumping || falling || crouching)) {
+			bounds = crouchingBounds;
+			tex = jumpAttackTexture;
+		}
+
+		for(Texture t: textures) {
+			if(!tex.equals(t)) {
+				t.reset();
+			}
+		}
+	}
+
 	@Override
-	public void handleInput() {
-		if(Keys.isHeld(Keys.LEFT)) {
-			facingRight = false;
-			tex = walkingTexture;
-			moveX(Entity.Direction.LEFT, speed);
-		}
-		if(Keys.isHeld(Keys.RIGHT)) {
-			facingRight = true;
-			tex = walkingTexture;
-			moveX(Entity.Direction.RIGHT, speed);
-		}
-		if(Keys.isPressed(Keys.UP)) {
-			jump();
-		}
+	protected void handleInput() {
+		if(Keys.isHeld(Keys.ACTION1))
+			attack();
 
-		if(!Keys.isHeld(Keys.LEFT) && !Keys.isHeld(Keys.RIGHT) && !jumping && !falling) {
-			walkingTexture.reset();
+		if(!attacking) {
+			if(Keys.isHeld(Keys.LEFT) && !Keys.isHeld(Keys.RIGHT) && !attacking) {
+				moveX(Entity.Direction.LEFT, speed);
+				facingRight = false;
+				moving = true;
+			}
+			else if(Keys.isHeld(Keys.RIGHT) && !Keys.isHeld(Keys.LEFT) && !attacking) {
+				moveX(Entity.Direction.RIGHT, speed);
+				facingRight = true;
+				moving = true;
+			} else
+				moving = false;
+			if(Keys.isPressed(Keys.UP)) {
+				jump();
+			}
 
-			if(!crouched)
-				tex = idleTexture;
-			else
-				tex = crouchTexture;
+			if(Keys.isHeld(Keys.DOWN)) {
+				if(!(jumping || falling || attacking)) {
+					crouching = true;
+				}
+			} else {
+				crouching = false;
+			}
 		}
 	}
 
@@ -89,13 +145,18 @@ public class Player extends Creature {
 			if(facingRight)
 				tex.draw(g, (int)x - (int)camera.getX(), (int)y - (int)camera.getY());
 			else {
-				Utils.flipTexture(tex).draw(g, (int)x - (int)camera.getX(), (int)y - (int)camera.getY());
+				tex.draw(g, (int)x + 16 - (int)camera.getX(), (int)y - (int)camera.getY(), -tex.getWidth(), tex.getHeight());
 			}
 
-			//g.setColor(Color.red);
-			//g.drawRect((int)x + (int)bounds.getX() - (int)camera.getX(), (int)y + (int)bounds.getY()- (int)camera.getY(), (int)bounds.getWidth(), (int)bounds.getHeight());
-			//System.out.println("X & Y: "+ x + ", " + y);
-			//System.out.println("W & H: "+ bounds.getWidth() + ", " + bounds.getHeight());
+			if(GamePanel.DEBUG_RENDERBOXES) {
+				g.setColor(Color.RED);
+				g.drawRect((int)x + (int)bounds.getX() - (int)camera.getX(), (int)y + (int)bounds.getY()- (int)camera.getY(), (int)bounds.getWidth(), (int)bounds.getHeight());
+
+				if(attacking) {
+					g.setColor(Color.GREEN);
+					g.drawRect((int)x + (int)bounds.getX() + (int)attackBounds.getX() - (int)camera.getX(), (int)y + (int)bounds.getY() + (int)attackBounds.getY()- (int)camera.getY(), (int)attackBounds.getWidth(), (int)attackBounds.getHeight());
+				}
+			}
 		}
 	}
 }

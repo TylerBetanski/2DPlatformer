@@ -3,7 +3,7 @@ package input;
 import com.sun.glass.events.KeyEvent;
 
 public class Keys {
-	public static final int NUM_KEYS = 5;
+	public static final int NUM_KEYS = 6;
 	public static boolean keyState[] = new boolean[NUM_KEYS];
 	public static boolean prevKeyState[] = new boolean[NUM_KEYS];
 	
@@ -12,6 +12,7 @@ public class Keys {
 	public static final int LEFT = 2;
 	public static final int RIGHT = 3;
 	public static final int ACTION1 = 4;
+	public static final int ENTER = 5;
 	
 	public static void keySet(int i, boolean b) {
 		if(i == KeyEvent.VK_W) keyState[UP] = b;
@@ -19,6 +20,7 @@ public class Keys {
 		else if(i == KeyEvent.VK_A) keyState[LEFT] = b;
 		else if(i == KeyEvent.VK_D) keyState[RIGHT] = b;
 		else if(i == KeyEvent.VK_SPACE) keyState[ACTION1] = b;
+		else if(i == KeyEvent.VK_ENTER) keyState[ENTER] = b;
 	}
 	
 	public static void update() {

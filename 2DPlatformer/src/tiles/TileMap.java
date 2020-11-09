@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 
 import assets.Assets;
 import gfx.Camera;
+import main.GamePanel;
 import utils.Utils;
 
 public class TileMap {
@@ -36,7 +37,9 @@ public class TileMap {
 				if(tiles[x][y] != null && tiles[x][y].getClass() != AirTile.class) {
 					if(camera.inBounds(x * Tile.TILE_SIZE, y * Tile.TILE_SIZE)) {
 						tiles[x][y].draw(g, x * Tile.TILE_SIZE - (int)camera.getX(), y * Tile.TILE_SIZE - (int)camera.getY());
-						//drawCollision(g, camera, x, y);
+						
+						if(GamePanel.DEBUG_RENDERBOXES)
+							drawCollision(g, camera, x, y);
 					}
 				}
 			}
@@ -44,20 +47,20 @@ public class TileMap {
 	}
 
 	public void drawCollision(Graphics2D g, Camera camera, int x, int y) {
-		g.setColor(Color.RED);
+		g.setColor(Color.MAGENTA);
 
 		// No Tile Above
 		if(y > 0 && tiles[x][y-1].getClass() == AirTile.class)
-			g.drawLine(x * Tile.TILE_SIZE, y * Tile.TILE_SIZE, x * Tile.TILE_SIZE + 16, y * Tile.TILE_SIZE);
+			g.drawLine(x * Tile.TILE_SIZE, y * Tile.TILE_SIZE, x * Tile.TILE_SIZE + 15, y * Tile.TILE_SIZE);
 		// No Tile Below
 		if(y < tiles[x].length - 1 && tiles[x][y+1].getClass() == AirTile.class)
-			g.drawLine(x * Tile.TILE_SIZE, y * Tile.TILE_SIZE + 16, x * Tile.TILE_SIZE + 16, y * Tile.TILE_SIZE + 16);
+			g.drawLine(x * Tile.TILE_SIZE, y * Tile.TILE_SIZE + 15, x * Tile.TILE_SIZE + 15, y * Tile.TILE_SIZE + 15);
 		// No Tile on Left
 		if(x > 0 && tiles[x-1][y].getClass() == AirTile.class)
-			g.drawLine(x * Tile.TILE_SIZE, y * Tile.TILE_SIZE, x * Tile.TILE_SIZE, y * Tile.TILE_SIZE + 16);
+			g.drawLine(x * Tile.TILE_SIZE, y * Tile.TILE_SIZE, x * Tile.TILE_SIZE, y * Tile.TILE_SIZE + 15);
 		// No Tile on Right
 		if(x < tiles.length - 1 && tiles[x+1][y].getClass() == AirTile.class)
-			g.drawLine(x * Tile.TILE_SIZE + 16, y * Tile.TILE_SIZE, x * Tile.TILE_SIZE + 16, y * Tile.TILE_SIZE + 16);
+			g.drawLine(x * Tile.TILE_SIZE + 15, y * Tile.TILE_SIZE, x * Tile.TILE_SIZE + 15, y * Tile.TILE_SIZE + 15);
 	}
 
 	public void update() {
@@ -76,6 +79,13 @@ public class TileMap {
 				return new AirTile();
 		}
 		return new AirTile();
+	}
+	
+	public Tile getTileAtIndex(int x, int y) {
+		if(x > 0 && x < tiles.length && y > 0 && y < tiles[0].length) {
+			return tiles[x][y];
+		} else
+			return new AirTile();
 	}
 
 	public int getWidth() { return tiles.length * Tile.TILE_SIZE; }

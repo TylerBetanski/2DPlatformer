@@ -57,28 +57,22 @@ public abstract class Entity {
 		return (bounds1.intersects(bounds2) && (this.isSolid() && object.isSolid()));
 	}
 
-	// Check for collision with the map at the specified location, with the collision being of tiles inside the objects collision box
 	public boolean checkMapCollision(int x, int y) {
-		ArrayList<Tile> tiles = new ArrayList<Tile>();
-		for(int x1 = 0; x1 < Math.ceil(bounds.getWidth() / Tile.TILE_SIZE); x1++) {
-			for(int y1 = 0; y1 < Math.ceil(bounds.getHeight() / Tile.TILE_SIZE); y1++) {
-				tiles.add(((LevelState)gsm.getCurrentState()).getTileMap().getTile((int)(x + bounds.getX()) + Tile.TILE_SIZE * x1, (int)(y + bounds.getY()) + Tile.TILE_SIZE * y1));
+		int xMin = (int)(x + bounds.getX()) / Tile.TILE_SIZE;
+		int xMax = (int)((x + bounds.getX() + bounds.getWidth()) / Tile.TILE_SIZE);
+		int yMin = (int)(y + bounds.getY()) / Tile.TILE_SIZE;
+		int yMax = (int)((y + bounds.getY() + bounds.getHeight()) / Tile.TILE_SIZE);
+		
+		for(int x1 = xMin; x1 <= xMax; x1++) {
+			int count = 0;
+			for(int y1 = yMin; y1 <= yMax; y1++) {
+				if(((LevelState)gsm.getCurrentState()).getTileMap().getTileAtIndex(x1, y1).isSolid())
+					return false;
 			}
+			count++;
 		}
 		
-		for(Tile t : tiles) {
-			if(t.isSolid())
-				return true;
-		}
-		return false;
-	}
-	
-	// Check collision based on 4 corners of bounds
-	public boolean checkMapCollisionSimple(int x, int y) {
-		return(!((LevelState)gsm.getCurrentState()).getTileMap().getTile(x + (int)(bounds.getX()),y + (int)(bounds.getY())).isSolid()
-				&&!((LevelState)gsm.getCurrentState()).getTileMap().getTile(x + (int)(bounds.getX() + bounds.getWidth()),y + (int)(bounds.getY())).isSolid()
-				&&!((LevelState)gsm.getCurrentState()).getTileMap().getTile(x + (int)(bounds.getX()),y + (int)(bounds.getY() + bounds.getHeight())).isSolid()
-				&&!((LevelState)gsm.getCurrentState()).getTileMap().getTile(x + (int)(bounds.getX() + bounds.getWidth()),y + (int)(bounds.getY() + bounds.getHeight())).isSolid());
+		return true;
 	}
 
 	// Check for collision in a specified direction
@@ -101,7 +95,7 @@ public abstract class Entity {
 				tiles.add(((LevelState)gsm.getCurrentState()).getTileMap().getTile((int)(x + bounds.getX() + bounds.getWidth()) + 1, (int)(y + bounds.getY()) + Tile.TILE_SIZE * i));
 			}
 		}
-		
+
 		for(Tile t : tiles) {
 			if(t.isSolid())
 				return true;

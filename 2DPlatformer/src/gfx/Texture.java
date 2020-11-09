@@ -5,6 +5,8 @@ import java.awt.image.BufferedImage;
 
 public class Texture {
 	protected BufferedImage texture;
+	protected int originX = 0;
+	protected int originY = 0;
 
 	public Texture(BufferedImage image) {
 		BufferedImage tempImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
@@ -22,14 +24,26 @@ public class Texture {
 	}
 
 	public void draw(Graphics2D g, int x, int y, int width, int height) {
-		g.drawImage(texture, x, y, width, height, null);
+		g.drawImage(texture, x - ((width / texture.getWidth()) * originX), y - ((height / texture.getHeight()) * originY), width, height, null);
 	}
 
 	public void draw(Graphics2D g, int x, int y) {
-		g.drawImage(texture, x, y, null);
+		g.drawImage(texture, x - originX, y - originY, null);
 	}
-
+	
+	public void setOrigin(int x, int y) {
+		originX = x;
+		originY = y;
+	}
+	
+	public int getOriginX() { return originX; }
+	public int getOriginY() { return originY; }
+	
 	public void update() {}
+	
+	public void reset() {}
+	
+	public boolean animationEnded() {return true;}
 	
 	public BufferedImage getImage() {
 		BufferedImage tempImage = new BufferedImage(texture.getWidth(), texture.getHeight(), BufferedImage.TYPE_INT_ARGB);

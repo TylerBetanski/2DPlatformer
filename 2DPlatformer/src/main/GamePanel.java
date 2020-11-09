@@ -19,7 +19,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 	// Dimensions
 	public static final int WIDTH = 320;
 	public static final int HEIGHT = 192;
-	public final int SCALE = 4;
+	public static final int SCALE = 4;
 
 	// Game Thread
 	private Thread thread;
@@ -33,6 +33,9 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 	
 	// Game State Manager
 	private GameStateManager gsm;
+	
+	// Debug
+	public static final boolean DEBUG_RENDERBOXES = true;
 
 	public GamePanel() {
 		super();
@@ -108,7 +111,6 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 
 	private void drawToScreen() {
 		Graphics g2 = getGraphics();
-		//image = RenderEffect.colorScale(image, Color.MAGENTA, Color.CYAN);
 		g2.drawImage(image, 0, 0, WIDTH * SCALE, HEIGHT * SCALE, null);
 		g2.dispose();
 	}
