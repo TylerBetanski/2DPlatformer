@@ -49,7 +49,7 @@ public class Player extends Creature {
 
 		maxHealth = 5;
 		health = maxHealth;
-		speed = 1.0;
+		speed = 1;
 		affectedByGravity = true;
 		localGravityScale = 1;
 		jumpPower = 6;
@@ -75,10 +75,10 @@ public class Player extends Creature {
 		updateTextures();
 		tex.update();
 		gravity();
-		
+
 		if(attacking)
 			attack();
-		 
+
 		if(health <= 0)
 			dead = true;
 	}
@@ -113,29 +113,27 @@ public class Player extends Creature {
 		if(Keys.isHeld(Keys.ACTION1))
 			attack();
 
-		if(!attacking) {
-			if(Keys.isHeld(Keys.LEFT) && !Keys.isHeld(Keys.RIGHT) && !attacking) {
-				moveX(Entity.Direction.LEFT, speed);
-				facingRight = false;
-				moving = true;
-			}
-			else if(Keys.isHeld(Keys.RIGHT) && !Keys.isHeld(Keys.LEFT) && !attacking) {
-				moveX(Entity.Direction.RIGHT, speed);
-				facingRight = true;
-				moving = true;
-			} else
-				moving = false;
-			if(Keys.isPressed(Keys.UP)) {
-				jump();
-			}
+		if(Keys.isHeld(Keys.LEFT) && !Keys.isHeld(Keys.RIGHT) && (!attacking || jumping)) {
+			moveX(Entity.Direction.LEFT, speed);
+			facingRight = false;
+			moving = true;
+		}
+		else if(Keys.isHeld(Keys.RIGHT) && !Keys.isHeld(Keys.LEFT) && (!attacking || jumping)) {
+			moveX(Entity.Direction.RIGHT, speed);
+			facingRight = true;
+			moving = true;
+		} else
+			moving = false;
+		if(Keys.isPressed(Keys.UP) && !attacking) {
+			jump();
+		}
 
-			if(Keys.isHeld(Keys.DOWN)) {
-				if(!(jumping || falling || attacking)) {
-					crouching = true;
-				}
-			} else {
-				crouching = false;
+		if(Keys.isHeld(Keys.DOWN)) {
+			if(!(jumping || falling || attacking)) {
+				crouching = true;
 			}
+		} else if(!attacking) {
+			crouching = false;
 		}
 	}
 

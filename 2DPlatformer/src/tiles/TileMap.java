@@ -37,9 +37,10 @@ public class TileMap {
 				if(tiles[x][y] != null && tiles[x][y].getClass() != AirTile.class) {
 					if(camera.inBounds(x * Tile.TILE_SIZE, y * Tile.TILE_SIZE)) {
 						tiles[x][y].draw(g, x * Tile.TILE_SIZE - (int)camera.getX(), y * Tile.TILE_SIZE - (int)camera.getY());
-						
-						if(GamePanel.DEBUG_RENDERBOXES)
-							drawCollision(g, camera, x, y);
+
+						if(GamePanel.DEBUG_RENDERBOXES) {
+							//drawCollision(g, camera, x, y);
+						}
 					}
 				}
 			}
@@ -50,16 +51,17 @@ public class TileMap {
 		g.setColor(Color.MAGENTA);
 
 		// No Tile Above
-		if(y > 0 && tiles[x][y-1].getClass() == AirTile.class)
+		if(y > 0 && (tiles[x][y-1].getClass() == AirTile.class || !tiles[x][y-1].isSolid()))
 			g.drawLine(x * Tile.TILE_SIZE, y * Tile.TILE_SIZE, x * Tile.TILE_SIZE + 15, y * Tile.TILE_SIZE);
 		// No Tile Below
-		if(y < tiles[x].length - 1 && tiles[x][y+1].getClass() == AirTile.class)
+		if(y < tiles[x].length - 1 && (tiles[x][y+1].getClass() == AirTile.class || tiles[x][y+1].isSolid()))
 			g.drawLine(x * Tile.TILE_SIZE, y * Tile.TILE_SIZE + 15, x * Tile.TILE_SIZE + 15, y * Tile.TILE_SIZE + 15);
 		// No Tile on Left
-		if(x > 0 && tiles[x-1][y].getClass() == AirTile.class)
+		if(x > 0 && (tiles[x-1][y].getClass() == AirTile.class || tiles[x-1][y].isSolid()))
 			g.drawLine(x * Tile.TILE_SIZE, y * Tile.TILE_SIZE, x * Tile.TILE_SIZE, y * Tile.TILE_SIZE + 15);
 		// No Tile on Right
-		if(x < tiles.length - 1 && tiles[x+1][y].getClass() == AirTile.class)
+		if(x < tiles.length - 1 && (tiles[x+1][y].getClass() == AirTile.class || tiles[x+1][y].isSolid()))
+	
 			g.drawLine(x * Tile.TILE_SIZE + 15, y * Tile.TILE_SIZE, x * Tile.TILE_SIZE + 15, y * Tile.TILE_SIZE + 15);
 	}
 
@@ -80,9 +82,9 @@ public class TileMap {
 		}
 		return new AirTile();
 	}
-	
+
 	public Tile getTileAtIndex(int x, int y) {
-		if(x > 0 && x < tiles.length && y > 0 && y < tiles[0].length) {
+		if(x >= 0 && x < tiles.length && y >= 0 && y < tiles[0].length) {
 			return tiles[x][y];
 		} else
 			return new AirTile();

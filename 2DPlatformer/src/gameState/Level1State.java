@@ -18,9 +18,9 @@ public class Level1State extends LevelState {
 
 	@Override
 	public void init() {
-		tileMap = new TileMap("Resources/Maps/testLevel2.tilemap");
+		tileMap = new TileMap("Resources/Maps/caveLevel.tilemap");
 		bg = new Background(Assets.BLANK_BG);
-		camera = new Camera(gameStateManager, 0,0,1);
+		camera = new Camera(gameStateManager, 0,0,5);
 		camera.setTarget(500, 200);
 		gravityScale = 0.5;
 		

@@ -21,8 +21,7 @@ public class Assets {
 
 	// TILESETS
 	public static final ArrayList<Tileset> TILESETS = new ArrayList<Tileset>();
-	public static final Tileset GRASS_TILESET = addTileset(TILESETS, new Tileset("/Tilesets/grassTileset.png", false));
-	public static final Tileset FLOOR_TILESET = addTileset(TILESETS, new Tileset("/Tilesets/floorsTileset.png", false));
+	public static final Tileset CAVE_TILESET = addTileset(TILESETS, new Tileset("/Tilesets/caveTileset.png", false));
 
 	// TEXTURES
 
@@ -33,7 +32,7 @@ public class Assets {
 			PLAYER_SHEET.getTextureAtIndex(2),
 			PLAYER_SHEET.getTextureAtIndex(1),
 			PLAYER_SHEET.getTextureAtIndex(0)}, 
-			new int[] {90, 90, 90, 90}));
+			new int[] {15, 15, 15, 15}));
 	public static final Texture PLAYER_JUMP = new Texture(PLAYER_SHEET.getTextureAtIndex(3));
 	public static final AnimatedTexture PLAYER_DIE = new AnimatedTexture(new Flipbook(new Texture[] {PLAYER_SHEET.getTextureAtIndex(6),
 			PLAYER_SHEET.getTextureAtIndex(7)}, 
@@ -41,7 +40,7 @@ public class Assets {
 	public static final AnimatedTexture PLAYER_ATTACK = new AnimatedTexture(new Flipbook(new Texture[] {PLAYER_SHEET.getTextureAtIndex(8),
 			PLAYER_SHEET.getTextureAtIndex(9),
 			PLAYER_SHEET.getTextureAtIndex(10)}, 
-			new int[] {60, 60, 60}));
+			new int[] {10, 10, 15}));
 	
 	public static final AnimatedTexture PLAYER_JUMP_ATTACK = new AnimatedTexture(new Flipbook(new Texture[] {PLAYER_SHEET.getTextureAtIndex(11),
 			PLAYER_SHEET.getTextureAtIndex(12),
@@ -49,7 +48,7 @@ public class Assets {
 			new int[] {10, 10, 15}));
 
 	public static void init() {
-		//Utils.convertImageToTilemap(Utils.loadImage("/Maps/testLevel2.png"));
+		//Utils.convertImageToTilemap(Utils.loadImage("/Maps/caveLevel.png"));
 	}
 
 	public static Tileset addTileset(ArrayList<Tileset> arrayList, Tileset tileset) {
