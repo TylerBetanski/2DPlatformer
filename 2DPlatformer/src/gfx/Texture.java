@@ -45,6 +45,12 @@ public class Texture {
 	
 	public boolean animationEnded() {return true;}
 	
+	public int getCount() {return 0;}
+	public int getCurrentIndex() {return 0;}
+	
+	public void setCount(int count) {}
+	public void setCurrentIndex(int index) {}
+	
 	public BufferedImage getImage() {
 		BufferedImage tempImage = new BufferedImage(texture.getWidth(), texture.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		for(int x = 0; x < texture.getWidth(); x++) {

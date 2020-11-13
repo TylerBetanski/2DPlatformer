@@ -75,34 +75,6 @@ public abstract class Entity {
 		return true;
 	}
 
-	// Check for collision in a specified direction
-	public boolean checkMapCollision(Direction direction) {
-		ArrayList<Tile> tiles = new ArrayList<Tile>();
-		if(direction == Direction.UP) {
-			for(int i = 0; i < Math.ceil(bounds.getWidth() / Tile.TILE_SIZE); i++) {
-				tiles.add(((LevelState)gsm.getCurrentState()).getTileMap().getTile((int)(x + bounds.getX()) + Tile.TILE_SIZE * i, (int)(y + bounds.getY()) - 1));
-			}
-		} else if(direction == Direction.DOWN) {
-			for(int i = 0; i < Math.ceil(bounds.getWidth() / Tile.TILE_SIZE); i++) {
-				tiles.add(((LevelState)gsm.getCurrentState()).getTileMap().getTile((int)(x + bounds.getX()) + Tile.TILE_SIZE * i, (int)(y + bounds.getY() + bounds.getHeight()) + 1));
-			}
-		} else if(direction == Direction.LEFT) {
-			for(int i = 0; i < Math.ceil(bounds.getHeight() / Tile.TILE_SIZE); i++) {
-				tiles.add(((LevelState)gsm.getCurrentState()).getTileMap().getTile((int)(x + bounds.getX()) - 1, (int)(y + bounds.getY()) + Tile.TILE_SIZE * i));
-			}
-		} else {
-			for(int i = 0; i < Math.ceil(bounds.getHeight() / Tile.TILE_SIZE); i++) {
-				tiles.add(((LevelState)gsm.getCurrentState()).getTileMap().getTile((int)(x + bounds.getX() + bounds.getWidth()) + 1, (int)(y + bounds.getY()) + Tile.TILE_SIZE * i));
-			}
-		}
-
-		for(Tile t : tiles) {
-			if(t.isSolid())
-				return true;
-		}
-		return false;
-	}
-
 	public abstract void update();
 	public abstract void draw(Graphics2D g, Camera camera);
 

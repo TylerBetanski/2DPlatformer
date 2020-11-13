@@ -8,6 +8,7 @@ import gfx.Flipbook;
 import gfx.Spritesheet;
 import gfx.Texture;
 import tiles.Tileset;
+import utils.Utils;
 
 public class Assets {
 
@@ -41,11 +42,37 @@ public class Assets {
 			PLAYER_SHEET.getTextureAtIndex(9),
 			PLAYER_SHEET.getTextureAtIndex(10)}, 
 			new int[] {10, 10, 15}));
-	
+
 	public static final AnimatedTexture PLAYER_JUMP_ATTACK = new AnimatedTexture(new Flipbook(new Texture[] {PLAYER_SHEET.getTextureAtIndex(11),
 			PLAYER_SHEET.getTextureAtIndex(12),
 			PLAYER_SHEET.getTextureAtIndex(13)}, 
 			new int[] {10, 10, 15}));
+
+	// Enemies
+	public static final Spritesheet ENEMIES_SHEET = new Spritesheet("/Textures/enemies_spritesheet.png");
+	public static final AnimatedTexture GHOUL = new AnimatedTexture(new Flipbook(new Texture[] {ENEMIES_SHEET.getTextureAtIndex(0),
+			ENEMIES_SHEET.getTextureAtIndex(1)}, 
+			new int[] {15, 15}));
+	public static final AnimatedTexture WOLFMAN = new AnimatedTexture(new Flipbook(new Texture[] {ENEMIES_SHEET.getTextureAtIndex(2),
+			ENEMIES_SHEET.getTextureAtIndex(3)}, 
+			new int[] {15, 15}));
+	public static final AnimatedTexture TRIDENTMAN = new AnimatedTexture(new Flipbook(new Texture[] {ENEMIES_SHEET.getTextureAtIndex(4),
+			ENEMIES_SHEET.getTextureAtIndex(5)}, 
+			new int[] {15, 15}));
+	public static final Texture HAND_OPEN = new Texture(ENEMIES_SHEET.getTextureAtIndex(6));
+	public static final Texture HAND_CLOSED = new Texture(ENEMIES_SHEET.getTextureAtIndex(7));
+	public static final AnimatedTexture BAT = new AnimatedTexture(new Flipbook(new Texture[] {ENEMIES_SHEET.getTextureAtIndex(8),
+			ENEMIES_SHEET.getTextureAtIndex(9)}, 
+			new int[] {15, 15}));
+	public static final AnimatedTexture FISHMAN = new AnimatedTexture(new Flipbook(new Texture[] {ENEMIES_SHEET.getTextureAtIndex(10),
+			ENEMIES_SHEET.getTextureAtIndex(11), ENEMIES_SHEET.getTextureAtIndex(12)}, 
+			new int[] {15, 15, 20}));
+	public static final Texture FIREBALL = new Texture(ENEMIES_SHEET.getTextureAtIndex(13));
+	public static final Texture PLANT = new Texture(ENEMIES_SHEET.getTextureAtIndex(14));
+	public static final Texture PLANT_SHOOT = new Texture(ENEMIES_SHEET.getTextureAtIndex(15));
+	
+	
+	
 
 	public static void init() {
 		//Utils.convertImageToTilemap(Utils.loadImage("/Maps/caveLevel.png"));

@@ -35,7 +35,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 	private GameStateManager gsm;
 	
 	// Debug
-	public static final boolean DEBUG_RENDERBOXES = true;
+	public static final boolean DEBUG_RENDERBOXES = false;
 
 	public GamePanel() {
 		super();

@@ -61,7 +61,7 @@ public class TileMap {
 			g.drawLine(x * Tile.TILE_SIZE, y * Tile.TILE_SIZE, x * Tile.TILE_SIZE, y * Tile.TILE_SIZE + 15);
 		// No Tile on Right
 		if(x < tiles.length - 1 && (tiles[x+1][y].getClass() == AirTile.class || tiles[x+1][y].isSolid()))
-	
+
 			g.drawLine(x * Tile.TILE_SIZE + 15, y * Tile.TILE_SIZE, x * Tile.TILE_SIZE + 15, y * Tile.TILE_SIZE + 15);
 	}
 
@@ -81,6 +81,26 @@ public class TileMap {
 				return new AirTile();
 		}
 		return new AirTile();
+	}
+
+	public int getTileX(Tile tile) {
+		for(int x = 0; x < tiles.length; x++) {
+			for(int y = 0; y < tiles[x].length; y++) {
+				if(tiles[x][y].equals(tile))
+					return x;
+			}
+		}
+		return 0;
+	}
+
+	public int getTileY(Tile tile) {
+		for(int x = 0; x < tiles.length; x++) {
+			for(int y = 0; y < tiles[x].length; y++) {
+				if(tiles[x][y].equals(tile))
+					return y;
+			}
+		}
+		return 0;
 	}
 
 	public Tile getTileAtIndex(int x, int y) {

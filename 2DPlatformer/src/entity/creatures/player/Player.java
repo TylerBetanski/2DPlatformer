@@ -94,8 +94,13 @@ public class Player extends Creature {
 			bounds = crouchingBounds;
 			tex = jumpTexture;
 		} else if(attacking && !(jumping || falling || crouching)) {
-			bounds = standingBounds;
-			tex = attackTexture;
+
+			if(tex.equals(jumpAttackTexture)) {
+			
+			} else {
+				bounds = standingBounds;
+				tex = attackTexture;
+			}
 		} else if(attacking &&(jumping || falling || crouching)) {
 			bounds = crouchingBounds;
 			tex = jumpAttackTexture;
@@ -142,9 +147,8 @@ public class Player extends Creature {
 		if(camera.inBounds((int)x, (int)y)) {
 			if(facingRight)
 				tex.draw(g, (int)x - (int)camera.getX(), (int)y - (int)camera.getY());
-			else {
+			else
 				tex.draw(g, (int)x + 16 - (int)camera.getX(), (int)y - (int)camera.getY(), -tex.getWidth(), tex.getHeight());
-			}
 
 			if(GamePanel.DEBUG_RENDERBOXES) {
 				g.setColor(Color.RED);

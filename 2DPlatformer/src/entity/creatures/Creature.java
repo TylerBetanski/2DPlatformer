@@ -10,6 +10,7 @@ import gameState.LevelState;
 import gfx.Camera;
 import gfx.Texture;
 import main.GamePanel;
+import tiles.AirTile;
 import tiles.Tile;
 
 public abstract class Creature extends Entity {
@@ -80,7 +81,7 @@ public abstract class Creature extends Entity {
 	}
 	
 	protected void gravity() {
-		yVelocity -= ((LevelState)gsm.getCurrentState()).getGravityScale() * localGravityScale;
+		yVelocity -= (((LevelState)gsm.getCurrentState()).getGravityScale() * localGravityScale) / 60.0;
 		yVelocity = Math.max(-3, yVelocity);
 		if(yVelocity < 0) {
 			moveY(Entity.Direction.DOWN, -yVelocity);
@@ -95,11 +96,27 @@ public abstract class Creature extends Entity {
 			yVelocity = jumpPower;
 		}
 	}
+	
+	protected Tile getTileStandingOn(Entity.Direction direction) {
+		Tile standingTile;
+		if(!affectedByGravity)
+			standingTile = new AirTile();
+		else {
+			if(direction == Entity.Direction.LEFT) {
+				standingTile = ((LevelState)gsm.getCurrentState()).getTileMap().getTile((int)(x + bounds.getX()),(int)(y + bounds.getY() + bounds.getHeight() + 1));
+			} else {
+				standingTile = ((LevelState)gsm.getCurrentState()).getTileMap().getTile((int)(x + bounds.getX() + bounds.getWidth()),(int)(y + bounds.getY() + bounds.getHeight() + 1));
+			}
+		}
+		return standingTile;
+	}
 
 	@Override
 	public abstract void update();
 
-	protected abstract void handleInput();
+	protected void handleInput() {
+		
+	};
 
 	@Override
 	public void draw(Graphics2D g, Camera camera) {

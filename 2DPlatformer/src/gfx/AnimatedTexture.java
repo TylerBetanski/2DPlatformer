@@ -73,8 +73,18 @@ public class AnimatedTexture extends Texture {
 		return (currentIndex == flipbook.getTextures().length - 1
 				&& count == flipbook.getFrameCount()[currentIndex]);
 	}
+	
+	@Override
+	public int getCount() {return count;}
+	@Override
+	public int getCurrentIndex() { return currentIndex; }
+	
+	@Override
+	public void setCount(int count) {this.count = count;}
+	@Override
+	public void setCurrentIndex(int index) {currentIndex = index;}
 
 	public Flipbook getFlipbook() { return new Flipbook(flipbook); }
-	public int getCurrentIndex() { return currentIndex; }
+
 
 }

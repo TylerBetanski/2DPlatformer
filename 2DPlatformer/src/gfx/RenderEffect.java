@@ -14,18 +14,18 @@ public class RenderEffect {
 						+(new Color(image.getRGB(x, y)).getGreen())
 						+(new Color(image.getRGB(x, y)).getBlue());
 				ratio /= (double)(255.0 * 3);
-				
+
 				pixelColor = new Color(
 						(int)(ratio * colorTo.getRed() + (1 - ratio) * colorFrom.getRed()),
 						(int)(ratio * colorTo.getGreen() + (1 - ratio) * colorFrom.getGreen()),
 						(int)(ratio * colorTo.getBlue() + (1 - ratio) * colorFrom.getBlue())
 						);
-				
-				
+
+
 				image.setRGB(x, y, pixelColor.getRGB());
 			}
 		}
-		
+
 		return image;
 	}
 
@@ -46,7 +46,7 @@ public class RenderEffect {
 
 		return image;
 	}
-	
+
 	public static BufferedImage blackAndWhite(BufferedImage image) {
 		Color pixelColor;
 		for(int x = 0; x < image.getWidth(); x++) {
@@ -61,7 +61,15 @@ public class RenderEffect {
 				image.setRGB(x, y, pixelColor.getRGB());
 			}
 		}
-		
+
 		return image;
+	}
+
+	public static void invert(BufferedImage image) {
+		for(int x = 0; x < image.getWidth(); x++) {
+			for(int y = 0; y < image.getHeight(); y++) {
+				image.setRGB(x, y, ~image.getRGB(x, y));
+			}
+		}
 	}
 }
