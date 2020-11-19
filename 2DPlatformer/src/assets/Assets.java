@@ -1,6 +1,10 @@
 package assets;
 
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
 
 import gfx.AnimatedTexture;
 import gfx.Background;
@@ -41,18 +45,17 @@ public class Assets {
 	public static final AnimatedTexture PLAYER_ATTACK = new AnimatedTexture(new Flipbook(new Texture[] {PLAYER_SHEET.getTextureAtIndex(8),
 			PLAYER_SHEET.getTextureAtIndex(9),
 			PLAYER_SHEET.getTextureAtIndex(10)}, 
-			new int[] {10, 10, 15}));
+			new int[] {5, 5, 6}));
 
 	public static final AnimatedTexture PLAYER_JUMP_ATTACK = new AnimatedTexture(new Flipbook(new Texture[] {PLAYER_SHEET.getTextureAtIndex(11),
 			PLAYER_SHEET.getTextureAtIndex(12),
 			PLAYER_SHEET.getTextureAtIndex(13)}, 
-			new int[] {10, 10, 15}));
+			new int[] {5, 5, 6}));
 
 	// Enemies
 	public static final Spritesheet ENEMIES_SHEET = new Spritesheet("/Textures/enemies_spritesheet.png");
-	public static final AnimatedTexture GHOUL = new AnimatedTexture(new Flipbook(new Texture[] {ENEMIES_SHEET.getTextureAtIndex(0),
-			ENEMIES_SHEET.getTextureAtIndex(1)}, 
-			new int[] {15, 15}));
+	public static final Texture GHOUL_NORMAL = new Texture(ENEMIES_SHEET.getTextureAtIndex(0));
+	public static final Texture GHOUL_CHARGE = new Texture(ENEMIES_SHEET.getTextureAtIndex(1));
 	public static final AnimatedTexture WOLFMAN = new AnimatedTexture(new Flipbook(new Texture[] {ENEMIES_SHEET.getTextureAtIndex(2),
 			ENEMIES_SHEET.getTextureAtIndex(3)}, 
 			new int[] {15, 15}));
@@ -70,9 +73,11 @@ public class Assets {
 	public static final Texture FIREBALL = new Texture(ENEMIES_SHEET.getTextureAtIndex(13));
 	public static final Texture PLANT = new Texture(ENEMIES_SHEET.getTextureAtIndex(14));
 	public static final Texture PLANT_SHOOT = new Texture(ENEMIES_SHEET.getTextureAtIndex(15));
-	
-	
-	
+
+	// Soul
+	public static final Texture SOUL = new Texture(loadImage("/Textures/Soul.png"));
+
+
 
 	public static void init() {
 		//Utils.convertImageToTilemap(Utils.loadImage("/Maps/caveLevel.png"));
@@ -81,5 +86,16 @@ public class Assets {
 	public static Tileset addTileset(ArrayList<Tileset> arrayList, Tileset tileset) {
 		arrayList.add(tileset);
 		return tileset;
+	}
+
+	public static BufferedImage loadImage(String path) {
+
+		try {
+			return ImageIO.read(Utils.class.getResource(path));
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+		return null;
 	}
 }

@@ -5,6 +5,8 @@ import java.awt.image.BufferedImage;
 
 public class Texture {
 	protected BufferedImage texture;
+	protected BufferedImage invertedTexture;
+	protected boolean inverted;
 	protected int originX = 0;
 	protected int originY = 0;
 
@@ -15,20 +17,28 @@ public class Texture {
 				tempImage.setRGB(x, y, image.getRGB(x, y));
 			}
 		}
-
 		this.texture = tempImage;
+		this.invertedTexture = RenderEffect.invert(tempImage);
 	}
 
 	public Texture(Texture texture) {
 		this.texture = texture.getImage();
+		this.invertedTexture = RenderEffect.invert(this.texture);
 	}
 
 	public void draw(Graphics2D g, int x, int y, int width, int height) {
-		g.drawImage(texture, x - ((width / texture.getWidth()) * originX), y - ((height / texture.getHeight()) * originY), width, height, null);
+		BufferedImage drawTexture = texture;
+		if(inverted) {
+			drawTexture = invertedTexture;
+		}
+		
+		g.drawImage(drawTexture, x - ((width / texture.getWidth()) * originX), y - ((height / texture.getHeight()) * originY), width, height, null);
 	}
 
 	public void draw(Graphics2D g, int x, int y) {
-		g.drawImage(texture, x - originX, y - originY, null);
+		draw(g, x, y, texture.getWidth(), texture.getHeight());
+		
+		//g.drawImage(texture, x - originX, y - originY, null);
 	}
 	
 	public void setOrigin(int x, int y) {
@@ -41,7 +51,7 @@ public class Texture {
 	
 	public void update() {}
 	
-	public void reset() {}
+	public void reset() {inverted = false;}
 	
 	public boolean animationEnded() {return true;}
 	
@@ -69,7 +79,10 @@ public class Texture {
 		}
 		texture = tempImage; 
 	}
-	protected void setImage(Texture texture) { this.texture = texture.getImage(); }
+	protected void setImage(Texture texture) { this.texture = texture.getImage();
+												this.invertedTexture = RenderEffect.invert(this.texture); }
 	public int getWidth() { return texture.getWidth(); }
 	public int getHeight() { return texture.getHeight(); }
+	public boolean isInverted() { return inverted; }
+	public void invert(boolean inverted) { this.inverted = inverted; }
 }

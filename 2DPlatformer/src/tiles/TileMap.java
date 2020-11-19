@@ -1,6 +1,5 @@
 package tiles;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 
 import assets.Assets;
@@ -30,39 +29,13 @@ public class TileMap {
 			}
 		}
 	}
-
+	
 	public void draw(Graphics2D g, Camera camera) {
-		for(int x = 0; x < tiles.length; x++) {
-			for(int y = 0; y < tiles[x].length; y++) {
-				if(tiles[x][y] != null && tiles[x][y].getClass() != AirTile.class) {
-					if(camera.inBounds(x * Tile.TILE_SIZE, y * Tile.TILE_SIZE)) {
-						tiles[x][y].draw(g, x * Tile.TILE_SIZE - (int)camera.getX(), y * Tile.TILE_SIZE - (int)camera.getY());
-
-						if(GamePanel.DEBUG_RENDERBOXES) {
-							//drawCollision(g, camera, x, y);
-						}
-					}
-				}
+		for(int x = (int)Math.floor(camera.getX() / Tile.TILE_SIZE); x < (int)Math.ceil((camera.getX() + GamePanel.WIDTH) / Tile.TILE_SIZE); x++) {
+			for(int y = (int)Math.floor(camera.getY() / Tile.TILE_SIZE); y < (int)Math.ceil((camera.getY() + GamePanel.HEIGHT) / Tile.TILE_SIZE); y++) {
+				tiles[x][y].draw(g, x * Tile.TILE_SIZE - (int)camera.getX(), y * Tile.TILE_SIZE - (int)camera.getY());
 			}
 		}
-	}
-
-	public void drawCollision(Graphics2D g, Camera camera, int x, int y) {
-		g.setColor(Color.MAGENTA);
-
-		// No Tile Above
-		if(y > 0 && (tiles[x][y-1].getClass() == AirTile.class || !tiles[x][y-1].isSolid()))
-			g.drawLine(x * Tile.TILE_SIZE, y * Tile.TILE_SIZE, x * Tile.TILE_SIZE + 15, y * Tile.TILE_SIZE);
-		// No Tile Below
-		if(y < tiles[x].length - 1 && (tiles[x][y+1].getClass() == AirTile.class || tiles[x][y+1].isSolid()))
-			g.drawLine(x * Tile.TILE_SIZE, y * Tile.TILE_SIZE + 15, x * Tile.TILE_SIZE + 15, y * Tile.TILE_SIZE + 15);
-		// No Tile on Left
-		if(x > 0 && (tiles[x-1][y].getClass() == AirTile.class || tiles[x-1][y].isSolid()))
-			g.drawLine(x * Tile.TILE_SIZE, y * Tile.TILE_SIZE, x * Tile.TILE_SIZE, y * Tile.TILE_SIZE + 15);
-		// No Tile on Right
-		if(x < tiles.length - 1 && (tiles[x+1][y].getClass() == AirTile.class || tiles[x+1][y].isSolid()))
-
-			g.drawLine(x * Tile.TILE_SIZE + 15, y * Tile.TILE_SIZE, x * Tile.TILE_SIZE + 15, y * Tile.TILE_SIZE + 15);
 	}
 
 	public void update() {

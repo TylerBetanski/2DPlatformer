@@ -2,6 +2,7 @@ package gfx;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
 
 public class RenderEffect {
 
@@ -65,11 +66,29 @@ public class RenderEffect {
 		return image;
 	}
 
-	public static void invert(BufferedImage image) {
+	public static BufferedImage invert(BufferedImage image) {
+		BufferedImage returnedImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		
 		for(int x = 0; x < image.getWidth(); x++) {
 			for(int y = 0; y < image.getHeight(); y++) {
-				image.setRGB(x, y, ~image.getRGB(x, y));
+				Color pixelColor = new Color(image.getRGB(x, y), true);
+				if(pixelColor.getAlpha() > 0) {
+					int newRed = 255 - pixelColor.getRed();
+					int newGreen = 255 - pixelColor.getGreen();
+					int newBlue = 255 - pixelColor.getBlue();
+					returnedImage.setRGB(x, y, new Color(newRed, newGreen, newBlue).getRGB());
+					
+				}
+				else {
+					
+				}
 			}
 		}
+		
+		return returnedImage;
+	}
+	
+	public static Texture invert(Texture t) {
+		return new Texture(invert(t.getImage()));
 	}
 }

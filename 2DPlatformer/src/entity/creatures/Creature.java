@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
+import assets.Assets;
 import entity.Entity;
 import gameState.GameStateManager;
 import gameState.LevelState;
@@ -14,13 +15,18 @@ import tiles.AirTile;
 import tiles.Tile;
 
 public abstract class Creature extends Entity {
+	public static final int invulnerabilityFrames = 30;
+	protected int currentInvulnerableFrames = invulnerabilityFrames;
+
 	protected int health, maxHealth;
 	protected double speed;
 	protected double yVelocity;
-	protected boolean dead, jumping, falling, attacking;
-	protected boolean affectedByGravity;
+	protected boolean dying, jumping, falling, attacking, invulnerable, hitFromRight;
+	protected boolean facingRight = true;
+	protected boolean affectedByGravity = true;
 	protected double localGravityScale;
 	protected int jumpPower = 6;
+	protected int soulHeight, maxSoulHeight;
 
 	public Creature(GameStateManager gsm, Texture tex, double x, double y, Rectangle bounds, int maxHealth, double speed, double gravityScale) {
 		super(gsm, tex, x, y, bounds);
@@ -39,7 +45,7 @@ public abstract class Creature extends Entity {
 		if(localGravityScale != 0)
 			affectedByGravity = true;
 	}
-	
+
 	public Creature(GameStateManager gsm, Texture tex, double x, double y, Rectangle bounds, boolean solid) {
 		super(gsm, tex, x, y, bounds);
 	}
@@ -79,7 +85,7 @@ public abstract class Creature extends Entity {
 			}
 		}
 	}
-	
+
 	protected void gravity() {
 		yVelocity -= (((LevelState)gsm.getCurrentState()).getGravityScale() * localGravityScale) / 60.0;
 		yVelocity = Math.max(-3, yVelocity);
@@ -89,7 +95,7 @@ public abstract class Creature extends Entity {
 			moveY(Entity.Direction.UP, yVelocity);
 		}
 	}
-	
+
 	protected void jump() {
 		if(!jumping && !falling) {
 			jumping = true;
@@ -97,6 +103,13 @@ public abstract class Creature extends Entity {
 		}
 	}
 	
+	protected void jump(int power) {
+		if(!jumping && !falling) {
+			jumping = true;
+			yVelocity = power;
+		}
+	}
+
 	protected Tile getTileStandingOn(Entity.Direction direction) {
 		Tile standingTile;
 		if(!affectedByGravity)
@@ -111,21 +124,104 @@ public abstract class Creature extends Entity {
 		return standingTile;
 	}
 
+	public abstract void updateLogic();
+	
 	@Override
-	public abstract void update();
+	public void update() {
+		if(!dying) {
+			if(invulnerable) {
+				invulnerability();
+			} else {
+				updateLogic();
+			}
+			if(affectedByGravity) {
+				gravity();
+			}
 
-	protected void handleInput() {
+		} else {
+			
+		}
+	}
+
+	protected void handleInput() {};
+
+	protected boolean invulnerability() {
+		if(invulnerable) {
+			currentInvulnerableFrames--;
+			if(jumping || falling) {
+				if(hitFromRight) {
+					moveX(Entity.Direction.RIGHT, 1);
+				} else {
+					moveX(Entity.Direction.LEFT, 1);
+				}
+			}
+			if(currentInvulnerableFrames <= 0) {
+				currentInvulnerableFrames = invulnerabilityFrames;
+				tex.invert(false);
+				invulnerable = false;
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public void die() {
+		System.out.println(this.getClass().getSimpleName()+" has died!");
+		soulHeight = (int)y;
+		maxSoulHeight = (int)(y - 30);
+		dying = true;
+	}
+
+	public void hurt(Entity e) {
+		if(!invulnerable) {
+			System.out.println(this.getClass().getSimpleName()+" has been hurt! Health Remaining: "+health);
+			health--;
+			knockback();
+			if(e.getX() >= x)
+				hitFromRight = false;
+			else
+				hitFromRight = true;
+			
+			if(health <= 0)
+				die();
+			else {
+				tex.invert(true);
+				invulnerable = true;
+			}
+		}
+	}
+	
+	protected void knockback() {
+		jump(4);
+	}
+	
+	public void drawSoul(Graphics2D g, Camera camera) {
+		if(facingRight) {
+			Assets.SOUL.draw(g, (int)(x + 16 - camera.getX()), (int)(soulHeight - camera.getY()), -Assets.SOUL.getWidth(), Assets.SOUL.getHeight());
+		} else {
+			Assets.SOUL.draw(g, (int)(x - camera.getX()), (int)(soulHeight - camera.getY()));
+		}
 		
-	};
-
-	@Override
+		soulHeight--;
+		if(soulHeight < maxSoulHeight) {
+			((LevelState)gsm.getCurrentState()).getEntityManager().removeEntity(this);
+		}
+	}
+	
 	public void draw(Graphics2D g, Camera camera) {
 		if(camera.inBounds((int)x, (int)y)) {
-			tex.draw(g, (int)x - (int)camera.getX(), (int)y - (int)camera.getY());
+			if(dying) {
+				drawSoul(g, camera);
+			} else {
+				if(facingRight)
+					tex.draw(g, (int)x + 16 - (int)camera.getX(), (int)y - (int)camera.getY(), - tex.getWidth(), tex.getHeight());
+				else
+					tex.draw(g, (int)x - (int)camera.getX(), (int)y - (int)camera.getY());
 
-			if(GamePanel.DEBUG_RENDERBOXES) {
-				g.setColor(Color.red);
-				g.drawRect((int)x + (int)bounds.getX() - (int)camera.getX(), (int)y + (int)bounds.getY()- (int)camera.getY(), (int)bounds.getWidth(), (int)bounds.getHeight());
+				if(GamePanel.DEBUG_RENDERBOXES) {
+					g.setColor(Color.red);
+					g.drawRect((int)x + (int)bounds.getX() - (int)camera.getX(), (int)y + (int)bounds.getY()- (int)camera.getY(), (int)bounds.getWidth(), (int)bounds.getHeight());
+				}
 			}
 		}
 	}

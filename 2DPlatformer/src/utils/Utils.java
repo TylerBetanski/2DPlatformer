@@ -33,17 +33,6 @@ public class Utils {
 		return builder.toString();
 	}
 
-	public static BufferedImage loadImage(String path) {
-
-		try {
-			return ImageIO.read(Utils.class.getResource(path));
-		} catch (IOException e) {
-			e.printStackTrace();
-			System.exit(1);
-		}
-		return null;
-	}
-
 	public static void convertImageToTilemap(BufferedImage image) {
 		System.out.println(image.getWidth() / Tile.TILE_SIZE + " " + image.getHeight() / Tile.TILE_SIZE);
 

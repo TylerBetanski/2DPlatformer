@@ -9,6 +9,7 @@ import assets.Assets;
 import entity.Entity;
 import entity.creatures.Creature;
 import gameState.GameStateManager;
+import gameState.LevelState;
 import gfx.AnimatedTexture;
 import gfx.Camera;
 import gfx.Texture;
@@ -26,11 +27,10 @@ public class Player extends Creature {
 	private static AnimatedTexture jumpAttackTexture = new AnimatedTexture(Assets.PLAYER_JUMP_ATTACK);
 	private static  Rectangle standingBounds = new Rectangle(0, 2, 15, 29);
 	private static Rectangle crouchingBounds = new Rectangle(0, 9, 15, 22);
-	private static Rectangle attackBoundsRight = new Rectangle(16, 8, 48, 8);
-	private static Rectangle attackBoundsLeft = new Rectangle(-49, 8, 48, 8);
+	private static Rectangle attackBoundsRight = new Rectangle(16, 8, 48, 2);
+	private static Rectangle attackBoundsLeft = new Rectangle(-49, 8, 48, 2);
 	private static Rectangle attackBounds = attackBoundsRight;
 
-	private boolean facingRight = true;
 	private boolean attacking = false;
 	private boolean crouching = false;
 	private boolean moving = false;
@@ -63,6 +63,20 @@ public class Player extends Creature {
 			else
 				attackBounds = attackBoundsLeft;
 		} else {
+
+			// Attack
+			ArrayList<Entity> entitiesHit = 
+					((LevelState)gsm.getCurrentState()).getEntityManager().checkEntityCollision(new Rectangle(
+							(int)(x + bounds.getX() + attackBounds.getX()),
+							(int)(y + bounds.getY() + attackBounds.getY()),
+							(int)attackBounds.getWidth(),
+							(int)attackBounds.getHeight()));
+
+			if(tex.getCurrentIndex() == 2) {
+				for(Entity e : entitiesHit) {
+					((Creature)e).hurt(this);
+				}
+			}
 			if(tex.animationEnded()) {
 				attacking = false;
 			}
@@ -70,20 +84,23 @@ public class Player extends Creature {
 	}
 
 	@Override
-	public void update() {
+	public void die() {
+
+	}
+
+	int invulnerableFrames = Creature.invulnerabilityFrames;
+	@Override
+	public void updateLogic() {
 		handleInput();
 		updateTextures();
 		tex.update();
-		gravity();
-
 		if(attacking)
 			attack();
-
-		if(health <= 0)
-			dead = true;
 	}
 
 	private void updateTextures() {
+		boolean invert = tex.isInverted();
+
 		if(moving && !(jumping || falling || crouching || attacking)) {
 			bounds = standingBounds;
 			tex = walkingTexture;
@@ -96,7 +113,7 @@ public class Player extends Creature {
 		} else if(attacking && !(jumping || falling || crouching)) {
 
 			if(tex.equals(jumpAttackTexture)) {
-			
+
 			} else {
 				bounds = standingBounds;
 				tex = attackTexture;
@@ -105,6 +122,9 @@ public class Player extends Creature {
 			bounds = crouchingBounds;
 			tex = jumpAttackTexture;
 		}
+
+		if(invert)
+			tex.invert(true);
 
 		for(Texture t: textures) {
 			if(!tex.equals(t)) {
@@ -115,7 +135,7 @@ public class Player extends Creature {
 
 	@Override
 	protected void handleInput() {
-		if(Keys.isHeld(Keys.ACTION1))
+		if(Keys.isPressed(Keys.ACTION1))
 			attack();
 
 		if(Keys.isHeld(Keys.LEFT) && !Keys.isHeld(Keys.RIGHT) && (!attacking || jumping)) {
@@ -146,17 +166,17 @@ public class Player extends Creature {
 	public void draw(Graphics2D g, Camera camera) {
 		if(camera.inBounds((int)x, (int)y)) {
 			if(facingRight)
-				tex.draw(g, (int)x - (int)camera.getX(), (int)y - (int)camera.getY());
+				tex.draw(g, (int)(x - camera.getX()), (int)(y - camera.getY()));
 			else
-				tex.draw(g, (int)x + 16 - (int)camera.getX(), (int)y - (int)camera.getY(), -tex.getWidth(), tex.getHeight());
+				tex.draw(g, (int)(x + 16 - camera.getX()), (int)(y - camera.getY()), -tex.getWidth(), tex.getHeight());
 
 			if(GamePanel.DEBUG_RENDERBOXES) {
 				g.setColor(Color.RED);
-				g.drawRect((int)x + (int)bounds.getX() - (int)camera.getX(), (int)y + (int)bounds.getY()- (int)camera.getY(), (int)bounds.getWidth(), (int)bounds.getHeight());
+				g.drawRect((int)(x + bounds.getX() - camera.getX()), (int)(y + bounds.getY()- camera.getY()), (int)bounds.getWidth(), (int)bounds.getHeight());
 
 				if(attacking) {
 					g.setColor(Color.GREEN);
-					g.drawRect((int)x + (int)bounds.getX() + (int)attackBounds.getX() - (int)camera.getX(), (int)y + (int)bounds.getY() + (int)attackBounds.getY()- (int)camera.getY(), (int)attackBounds.getWidth(), (int)attackBounds.getHeight());
+					g.drawRect((int)(x + bounds.getX() + attackBounds.getX() - camera.getX()), (int)(y + bounds.getY() + attackBounds.getY() - camera.getY()), (int)attackBounds.getWidth(), (int)attackBounds.getHeight());
 				}
 			}
 		}

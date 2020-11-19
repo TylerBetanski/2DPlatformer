@@ -2,13 +2,14 @@ package gfx;
 
 import java.awt.image.BufferedImage;
 
+import assets.Assets;
 import utils.Utils;
 
 public class Spritesheet {
 	private Texture[] textures;
 	
 	public Spritesheet(String loc, int xSize, int ySize) {
-		BufferedImage image = Utils.loadImage(loc);
+		BufferedImage image = Assets.loadImage(loc);
 		textures = new Texture[(image.getWidth() / xSize) * (image.getHeight() / ySize)];
 		int index = 0;
 		for(int x = 0; x < image.getWidth() / xSize; x++) {
@@ -20,7 +21,7 @@ public class Spritesheet {
 	}
 	
 	public Spritesheet(String loc) {
-		BufferedImage image = Utils.loadImage(loc);
+		BufferedImage image = Assets.loadImage(loc);
 		String file = Utils.loadFileAsString("Resources" + loc.substring(0, loc.indexOf(".")) + ".spritedata");
 		String[] tokens = file.split("\\R");
 		textures = new Texture[tokens.length];

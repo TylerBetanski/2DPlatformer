@@ -64,6 +64,7 @@ public class AnimatedTexture extends Texture {
 		currentIndex = 0;
 		originX = xOrigins[currentIndex];
 		originY = yOrigins[currentIndex];
+		inverted = false;
 		setImage(flipbook.getTextureAtIndex(currentIndex));
 	}
 

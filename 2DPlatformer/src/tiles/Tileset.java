@@ -3,6 +3,7 @@ package tiles;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 
+import assets.Assets;
 import gfx.Texture;
 import utils.Utils;
 
@@ -11,7 +12,7 @@ public class Tileset {
 
 	public Tileset(String loc, boolean autoSolid) {
 
-		BufferedImage tileset = Utils.loadImage(loc);
+		BufferedImage tileset = Assets.loadImage(loc);
 		tiles = new Tile[(int)((tileset.getWidth() / Tile.TILE_SIZE) * (tileset.getHeight() / Tile.TILE_SIZE))];
 		if(autoSolid) {
 			for(int x = 0; x < tileset.getWidth() / Tile.TILE_SIZE; x++) {

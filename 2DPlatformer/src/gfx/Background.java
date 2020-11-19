@@ -2,8 +2,8 @@ package gfx;
 
 import java.awt.Graphics2D;
 
+import assets.Assets;
 import main.GamePanel;
-import utils.Utils;
 
 public class Background {
 	private Texture texture;
@@ -12,7 +12,7 @@ public class Background {
 	private double moveScale;
 
 	public Background(String loc, double ms) {
-		texture = new Texture(Utils.loadImage(loc));
+		texture = new Texture(Assets.loadImage(loc));
 		moveScale = ms;
 	}
 	
