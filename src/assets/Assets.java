@@ -91,12 +91,13 @@ public class Assets {
 	public static final AnimatedTexture BAT = new AnimatedTexture(new Flipbook(new Texture[] {ENEMIES_SHEET.getTextureAtIndex(8),
 			ENEMIES_SHEET.getTextureAtIndex(9)}, 
 			new int[] {15, 15}));
-	public static final AnimatedTexture FISHMAN = new AnimatedTexture(new Flipbook(new Texture[] {ENEMIES_SHEET.getTextureAtIndex(10),
-			ENEMIES_SHEET.getTextureAtIndex(11), ENEMIES_SHEET.getTextureAtIndex(12)}, 
-			new int[] {15, 15, 20}));
-	public static final Texture FIREBALL = new Texture(ENEMIES_SHEET.getTextureAtIndex(13));
-	public static final Texture PLANT = new Texture(ENEMIES_SHEET.getTextureAtIndex(14));
-	public static final Texture PLANT_SHOOT = new Texture(ENEMIES_SHEET.getTextureAtIndex(15));
+	public static final AnimatedTexture FISHMAN_WALK = new AnimatedTexture(new Flipbook(new Texture[] {ENEMIES_SHEET.getTextureAtIndex(11),
+			ENEMIES_SHEET.getTextureAtIndex(12)}, 
+			new int[] {15, 15}));
+	public static final Texture FISHMAN_ATTACK = new Texture(ENEMIES_SHEET.getTextureAtIndex(13));
+	public static final Texture FIREBALL = new Texture(ENEMIES_SHEET.getTextureAtIndex(14));
+	public static final Texture PLANT = new Texture(ENEMIES_SHEET.getTextureAtIndex(15));
+	public static final Texture PLANT_SHOOT = new Texture(ENEMIES_SHEET.getTextureAtIndex(16));
 
 	// Soul
 	public static final Texture SOUL = new Texture(loadImage("/Textures/soul.png"));

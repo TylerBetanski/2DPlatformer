@@ -9,20 +9,27 @@ import entity.creatures.Creature;
 import gameState.GameStateManager;
 import gameState.LevelState;
 import gfx.AnimatedTexture;
+import gfx.Texture;
 import tiles.Tile;
 import tiles.TileMap;
 
-public class Wolfman extends Creature {
+public class Fishman extends Creature {
 
+	private static AnimatedTexture walkingTexture = new AnimatedTexture(Assets.FISHMAN_WALK);
+	private static Texture attackTexture = new Texture(Assets.FISHMAN_ATTACK);
+	
 	private static Rectangle bounds = new Rectangle(0,0,15,31);
 	TileMap map;
+	
+	int maxShootCooldown = 180;
+	int shootCooldown = 0;
 
-	public Wolfman(GameStateManager gsm, int x, int y, boolean sideFacing) {
-		super(gsm, new AnimatedTexture(Assets.WOLFMAN), x, y, bounds, true);
+	public Fishman(GameStateManager gsm, int x, int y, boolean sideFacing) {
+		super(gsm, walkingTexture, x, y, bounds, true);
 
 		maxHealth = 2;
 		health = maxHealth;
-		speed = 1;
+		speed = 0.75;
 		affectedByGravity = true;
 		localGravityScale = 1;
 		jumpPower = 0;
@@ -36,6 +43,42 @@ public class Wolfman extends Creature {
 	public void init(LevelState levelState) {
 		state = levelState;
 		map = state.getTileMap();
+	}
+	
+	private void shoot() {
+		if(shootCooldown == 0) {
+			state.getEntityManager().addEntity(new Fireball(gsm, (int)x, (int)y, false));
+			shootCooldown = maxShootCooldown;
+		}
+	}
+	
+	private void checkVision() {
+		int playerX = (int)((LevelState)gsm.getCurrentState()).getEntityManager().getPlayer().getX();
+		int playerY = (int)((LevelState)gsm.getCurrentState()).getEntityManager().getPlayer().getY();
+
+		if(((playerX > x && facingRight) || (playerX < x && !facingRight)) && Math.abs(playerY - y) < 32) {
+			TileMap map = ((LevelState)gsm.getCurrentState()).getTileMap();
+			int startTile = (int)(x / Tile.TILE_SIZE);
+			int endTile = (int)(playerX / Tile.TILE_SIZE);
+
+			int yTile = (int)(y / Tile.TILE_SIZE);
+
+			boolean obstructed = false;
+			if(facingRight) {
+				for(int i = startTile; i < endTile; i++) {
+					if(map.getTileAtIndex(i, yTile).isSolid())
+						obstructed = true;
+				}
+			} else {
+				for(int i = endTile; i > startTile; i--) {
+					if(map.getTileAtIndex(i, yTile).isSolid())
+						obstructed = true;
+				}
+			}
+			if(!obstructed && state.getCamera().inBounds((int)x, (int)y)) {
+				shoot();
+			}
+		}
 	}
 
 	private void movementLogic() {
@@ -105,6 +148,11 @@ public class Wolfman extends Creature {
 			((LevelState)gsm.getCurrentState()).getEntityManager().getPlayer().hurt(this);
 		}
 		movementLogic();
+		checkVision();
+		
+		if(shootCooldown > 0)
+			shootCooldown--;
+		
 		tex.update();
 		if(isStuck())
 			die();
@@ -112,7 +160,7 @@ public class Wolfman extends Creature {
 
 	@Override
 	public Entity clone(boolean sideFacing) {
-		Entity returnEntity = new Wolfman(gsm, (int)x, (int)y, sideFacing);
+		Entity returnEntity = new Fishman(gsm, (int)x, (int)y, sideFacing);
 		return returnEntity;
 	}
 }

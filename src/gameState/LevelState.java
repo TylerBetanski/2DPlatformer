@@ -1,13 +1,17 @@
 package gameState;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 
 import assets.Assets;
+import entity.Entity;
 import entity.EntityManager;
 import entity.creatures.enemies.*;
 import entity.creatures.player.Player;
 import gfx.Background;
 import gfx.Camera;
+import input.Keys;
+import main.GamePanel;
 import tiles.Tile;
 import tiles.TileMap;
 import utils.Utils;
@@ -26,6 +30,10 @@ public class LevelState extends GameState{
 	protected int enterRight;
 	protected boolean enteredLeft;
 	protected int index;
+	
+	protected boolean paused;
+	String[] pauseChoices = {"Resume", "Options", "Exit"};
+	int currentChoice = 0;
 
 	protected Player player;
 	protected int score;
@@ -82,6 +90,8 @@ public class LevelState extends GameState{
 				entityManager.addEntity(new Wolfman(gameStateManager, x, y, sideFacing));
 			} else if(index == 2) {
 				entityManager.addEntity(new Ghoul(gameStateManager, x, y, sideFacing));
+			} else if(index == 3) {
+				entityManager.addEntity(new Fishman(gameStateManager, x, y, sideFacing));
 			}
 		}
 	}
@@ -123,13 +133,40 @@ public class LevelState extends GameState{
 		player.setX(respawnX);
 		player.setY(respawnY);
 	}
+	
+	protected void handleInput() {
+		if(Keys.isPressed(Keys.ESCAPE)) {
+			System.out.println("PAUSING");
+			paused = !paused;
+			currentChoice = 0;
+		}
+		
+		if(paused) {
+			if(Keys.isPressed(Keys.UP) && currentChoice > 0)
+				currentChoice--;
+			if(Keys.isPressed(Keys.DOWN) && currentChoice < pauseChoices.length)
+				currentChoice++;
+			if(Keys.isPressed(Keys.ACTION1)) {
+				if(currentChoice == 0)
+					paused = false;
+				if(currentChoice == 2) {
+					gameStateManager.getSaveData().writeSaveData();
+					System.exit(0);
+				}
+			}
+		}
+	}
 
 	@Override
 	public void update() {
 		bg.update();
 		tileMap.update();
 		camera.update();
-		entityManager.update();
+		handleInput();
+		if(!paused) {
+			entityManager.update();
+		}
+		
 		if(player.getX() > tileMap.getWidth()) {
 			moveToNextLevel(true);
 		} else if(player.getX() + player.getBounds().getX() + player.getBounds().getWidth() < 0) {
@@ -142,5 +179,24 @@ public class LevelState extends GameState{
 		bg.draw(g, camera);
 		tileMap.draw(g, camera);
 		entityManager.draw(g, camera);
+		
+		if(paused) {
+			drawPauseMenu(g);
+		}
+	}
+	
+
+	public void drawPauseMenu(Graphics2D g) {
+		g.setColor(Color.BLACK);
+		g.fillRect(40, 20, GamePanel.WIDTH - 80, GamePanel.HEIGHT - 40);
+		g.setColor(Color.WHITE);
+		
+		for(int i = 0; i < pauseChoices.length; i++) {
+			if(i == currentChoice)
+				g.setColor(Color.YELLOW);
+			else
+				g.setColor(Color.WHITE);
+			g.drawString(pauseChoices[i], 60, 40 + (20 * i));
+		}
 	}
 }
